@@ -4,6 +4,7 @@ export default {
     host: '127.0.0.1',
     port: '8080'
   },
+  // mode: 'spa',
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'nuxt-blog',

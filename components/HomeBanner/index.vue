@@ -15,7 +15,7 @@
         <div class="header-info">
           <p class="sub-title">{{ subTitle }}</p>
           <div class="top-social d-flex justify-content-center">
-            <a href="#">
+            <a href="https://github.com/CyangOfficial" target="_blank">
               <svg-icon name="github" />
             </a>
             <a href="#">
@@ -34,7 +34,7 @@ export default {
   name: '',
   data () {
     return {
-      title: 'Hi, Mashiro!',
+      title: 'Hi, Cyang!',
       subTitle: '一沙一世界，一花一天堂。君掌盛无边，刹那成永恒。',
       coverImg: 'https://s3-hk.2heng.xin/mstdn/static/blog/cover/webp/d8c29cad010447a75b0eaae4513f3780.jpg.webp'
     };
@@ -130,6 +130,16 @@ export default {
           height: 2rem;
           margin-left: 0.5rem;
           display: block;
+          .svg-icon {
+            width: 1.4rem;
+            height: 1.4rem;
+            &.icon-wechat {
+              color: #07C160;
+            }
+            &.icon-github {
+              color: #5052d1;
+            }
+          }
         }
       }
     }

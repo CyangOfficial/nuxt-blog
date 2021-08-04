@@ -8817,6 +8817,13 @@ vue-client-only@^2.0.0:
   resolved "https://registry.nlark.com/vue-client-only/download/vue-client-only-2.1.0.tgz#1a67a47b8ecacfa86d75830173fffee3bf8a4ee3"
   integrity sha1-Gmeke47Kz6htdYMBc//+47+KTuM=
 
+vue-content-loader@0.2:
+  version "0.2.3"
+  resolved "https://registry.nlark.com/vue-content-loader/download/vue-content-loader-0.2.3.tgz#8516a2536b375ce5363ae6a14f5ff5ecbd13b696"
+  integrity sha1-hRaiU2s3XOU2OuahT1/17L0TtpY=
+  dependencies:
+    babel-helper-vue-jsx-merge-props "^2.0.3"
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.nlark.com/vue-hot-reload-api/download/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
