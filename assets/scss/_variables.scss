@@ -1,24 +1,18 @@
-html,
-body {
-  width: 100%;
-  height: 100%;
-}
+// 移动端尺寸
+$phone: 996px;
+$pc: 1024px;
 
-body {
-  cursor: url('https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/cursor/normal.cur'), auto;
-  background-color: #fff;
-  background-attachment: fixed;
-}
+$flex-jc: (
+  start: flex-start,
+  center: center,
+  end: flex-end,
+  between: space-between,
+  around: space-around
+);
 
-a {
-  cursor: url('https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/cursor/ayuda.cur'), auto;
-  text-decoration: none;
-}
-
-.svg-icon {
-  width: 2rem;
-  height: 2rem;
-}
-
-$theme-colors: ("navColor": ""
+$flex-ai: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  stretch: stretch //默认值。元素被拉伸以适应容器。
 );

@@ -3,7 +3,7 @@
   <footer class="footer-wrap">
     <p class="foot-info">Created with <svg-icon name="heart" /> by Cyang</p>
     <hr class="split-line">
-    <div class="copyright-intro d-flex justify-content-between">
+    <div class="copyright-intro d-flex jc-between ai-center">
       <p>Copyright © 2021 Cyang Inc. and its affiliates.</p>
       <nav>
         <span>Chronicle of Events</span>
@@ -20,6 +20,7 @@
   margin: 4.8rem auto 2.4rem;
   .foot-info {
     font-weight: 700;
+    @include font_color("footer");
     .icon-heart {
       width: 1.33rem;
       height: 1.33rem;
@@ -35,10 +36,12 @@
     border: 0px;
   }
   .copyright-intro {
+    @include font_color("footer");
     nav {
       span {
         font-size: 0.87rem;
         color: rgb(150, 150, 150);
+        @include font_color("footer");
         margin-right: 1rem;
       }
     }

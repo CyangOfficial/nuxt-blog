@@ -1,13 +1,13 @@
 const path = require('path')
 export default {
   server: {
-    host: '127.0.0.1',
+    host: '192.168.5.80',
     port: '8080'
   },
   // mode: 'spa',
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'nuxt-blog',
+    title: 'cyang-blog',
     htmlAttrs: {
       lang: 'en'
     },
@@ -19,21 +19,25 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' },
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css' }
+      // { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' },
+      // { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css' }
     ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     // 'ant-design-vue/dist/antd.css'
-    './assets/scss/_animation.scss'
+    './assets/css/animation.css',
+    './assets/css/normalize.css',
+    './assets/scss/style.scss',
+    './assets/scss/_media.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // '@/plugins/antd-ui'
-    { src: '@/plugins/svg', ssr: true }
+    { src: '@/plugins/svg', ssr: false },
+    { src: '@/plugins/post-loader', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -41,7 +45,14 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/style-resources',
   ],
+  styleResources: {
+    scss: [
+      './assets/scss/_variables.scss',
+      './assets/scss/_mixin.scss'
+    ]
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -49,9 +60,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    styleResources: {
-      scss: './assets/scss/_variables.scss'
-    },
+    extractCSS: true,
     extend (config, ctx) {
       // 排除 nuxt 原配置的影响,Nuxt 默认有vue-loader,会处理svg,img等
       // 找到匹配.svg的规则,然后将存放svg文件的目录排除

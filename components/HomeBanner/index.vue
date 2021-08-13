@@ -2,7 +2,7 @@
 <template>
   <div class="banner-container">
     <figure
-      class="banner-img d-flex align-items-center justify-content-center"
+      class="banner-img d-flex ai-center jc-center"
       :style="{ backgroundImage: 'url(' + coverImg + ')' }"
     >
       <section class="focus-info">
@@ -14,7 +14,7 @@
         </h1>
         <div class="header-info">
           <p class="sub-title">{{ subTitle }}</p>
-          <div class="top-social d-flex justify-content-center">
+          <div class="top-social d-flex jc-center">
             <a href="https://github.com/CyangOfficial" target="_blank">
               <svg-icon name="github" />
             </a>
@@ -71,6 +71,12 @@ export default {
     z-index: -1;
     width: 100%;
     height: 100vh;
+    margin: 0;
+    @include mobile() {
+      width: 100vw;
+      background-attachment: scroll;
+      align-items: flex-start;
+    }
     img {
       width: 100%;
       height: 100%;
@@ -80,6 +86,10 @@ export default {
     color: #fff;
     position: relative;
     z-index: 4;
+    @include mobile() {
+      text-align: center;
+      height: 100%;
+    }
     .glitch {
       font-size: 5rem;
       font-weight: bold;
@@ -87,6 +97,11 @@ export default {
       mix-blend-mode: lighten;
       text-transform: uppercase;
       user-select: none;
+      @include mobile() {
+        white-space: nowrap;
+        transform: scale(0.6);
+        margin: 10rem 0 1rem;
+      }
       &::before {
         left: -1px;
         text-shadow: 1px 0 #ff3f1a;
@@ -117,6 +132,16 @@ export default {
       background: rgba(0, 0, 0, 0.5);
       border-radius: 10px;
       padding: 1rem;
+      @include mobile() {
+        margin: 0 auto;
+        width: 85vw;
+        font-size: 0.8rem;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0.5rem;
+        .sub-title {
+          margin: 0.1rem 0;
+        }
+      }
       .sub-title {
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -125,14 +150,16 @@ export default {
         text-align: center;
       }
       .top-social {
+        @include mobile() {
+          margin-top: 0.5rem;
+        }
         a {
-          width: 2rem;
-          height: 2rem;
+          width: 1.5rem;
+          height: 1.5rem;
           margin-left: 0.5rem;
           display: block;
+          text-align: center;
           .svg-icon {
-            width: 1.4rem;
-            height: 1.4rem;
             &.icon-wechat {
               color: #07C160;
             }

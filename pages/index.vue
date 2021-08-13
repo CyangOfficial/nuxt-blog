@@ -2,14 +2,14 @@
   <section id="home-container">
     <HomeBanner />
     <section class="content">
-      <section class="notice d-flex align-items-center">
+      <section class="notice d-flex ai-center">
         <svg-icon name="notice"></svg-icon>
         {{ notice }}
       </section>
-      <h2 class="block-title d-flex align-items-center justify-content-start">
+      <h2 class="section-title d-flex ai-center jc-start m-hidden">
         <svg-icon name="hot" />Hot Section!
       </h2>
-      <section class="new-block-section d-flex justify-content-between">
+      <section class="new-block-section d-flex jc-between m-hidden">
         <a
           href="https://github.com/CyangOfficial/nuxt-blog"
           class="item-block"
@@ -27,7 +27,7 @@
           </div>
         </a>
       </section>
-      <h2 class="block-title d-flex align-items-center justify-content-start">
+      <h2 class="section-title d-flex ai-center jc-start">
         <svg-icon name="new" />Latest Posts!
       </h2>
       <div class="skeleton-wrap" v-if="!postList.length">
@@ -44,44 +44,46 @@
           </nuxt-link>
           <div class="post-wrap">
             <p class="create-time">
-              <!--<svg-icon name="time"></svg-icon>--><i class="bi-alarm"></i
-              >发布于：{{ item.createAt }}
+              <svg-icon name="time" />发布于：{{ item.createAt }}
             </p>
-            <nuxt-link to="/article" class="post-title">
+            <nuxt-link to="/article" class="post-links post-title">
               <h2>{{ item.title }}</h2>
             </nuxt-link>
             <div class="post-meta">
               <span class="item-meta"
-                ><i class="bi bi-eye"></i>{{ item.pv }}</span
+                ><svg-icon name="eye" />{{ item.pv }}</span
               >
               <span class="item-meta"
-                ><i class="bi bi-heart"></i>{{ item.likes }}</span
+                ><svg-icon name="heart_hollow" />{{ item.likes }}</span
               >
               <span class="item-meta">
-                <nuxt-link to="/"
-                  ><i class="bi bi-tag"></i>{{ item.tag }}</nuxt-link
+                <nuxt-link to="/article"
+                  ><svg-icon name="folder" />{{ item.tag }}</nuxt-link
                 >
               </span>
             </div>
             <p class="post-intro">{{ item.intro }}</p>
-            <nuxt-link to="/article" class="post-menu">
-              <svg-icon name="menu"></svg-icon>
+            <nuxt-link to="/article" class="post-menu m-hidden">
+              <svg-icon name="ellipsis"></svg-icon>
             </nuxt-link>
           </div>
         </section>
       </div>
     </section>
+    <Sidebar />
   </section>
 </template>
 
 <script>
 import HomeBanner from '@/components/HomeBanner'
 import PostLoader from '@/components/PostLoader'
+import Sidebar from '@/components/Sidebar'
 export default {
   name: 'Home',
   components: {
     HomeBanner,
-    PostLoader
+    PostLoader,
+    Sidebar
   },
   data () {
     return {
@@ -154,7 +156,7 @@ export default {
             })
           }
           resolve(postList)
-        }, 1500)
+        }, 3000)
       })
     },
     async postHandle () {
@@ -169,31 +171,51 @@ export default {
   .content {
     max-width: 59rem;
     margin: 0 auto;
+    @include mobile() {
+      max-width: 100vw;
+      padding: 0 1rem;
+    }
     .notice {
       padding: 1.25rem;
       border: 1px dashed #e6e6e6;
-      color: #969696;
-      background: #fbfbfb;
       width: 100%;
       border-radius: 0.6rem;
       margin-top: 3rem;
+      @include background_color("notice-bg-color");
+      @include font_color("notice-color");
+      @include border_color("notice-border");
+      @include theme_transition();
+      @include mobile() {
+        margin-bottom: 3rem;
+      }
       .icon-notice {
         width: 1.8rem;
         height: 1.8rem;
         margin-right: 1rem;
+        @include mobile() {
+          height: 1.2rem;
+        }
       }
     }
-    .block-title {
+    .section-title {
       font-size: 1.3rem;
       margin: 4rem 0 2rem;
       font-weight: 400;
       padding-bottom: 0.6rem;
       border-bottom: 1px dashed rgb(230, 230, 230);
-      color: rgb(102, 102, 102);
+      @include font_color("section-title");
+      @include mobile() {
+        margin: 2rem 0;
+        font-size: 1.1rem;
+      }
       .svg-icon {
         width: 1.8rem;
         height: 1.8rem;
         margin-right: 0.8rem;
+        @include mobile() {
+          width: 1.4rem;
+          height: 1.4rem;
+        }
       }
     }
     .new-block-section {
@@ -260,7 +282,9 @@ export default {
     }
     .skeleton-wrap {
       .post-loader-wrap:nth-of-type(2n) {
-        transform: rotateY(180deg);
+        @include mobile(pc) {
+          transform: rotateY(180deg);
+        }
       }
     }
 
@@ -270,14 +294,21 @@ export default {
         height: 20rem;
         margin-bottom: 3rem;
         color: #969696;
-        background-color: #fff;
-        box-shadow: rgba(150, 150, 150, 0.5) 0px 1px 20px -8px;
+        box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 20px -8px;
         overflow: hidden;
         border-radius: 0.5rem;
         text-align: right;
-        &:nth-of-type(2n) {
-          flex-direction: row-reverse;
-          text-align: left;
+        @include background_color("post-bg");
+        @include theme_transition(background);
+        @include mobile(pc) {
+          &:nth-of-type(2n) {
+            flex-direction: row-reverse;
+            text-align: left;
+          }
+        }
+        @include mobile() {
+          height: auto;
+          flex-direction: column;
         }
         .post-cover {
           width: 33rem;
@@ -292,26 +323,32 @@ export default {
             min-height: 100%;
             transition: all 0.5s ease;
           }
+          @include mobile() {
+            width: 100%;
+            height: 14rem;
+          }
         }
         .post-wrap {
           width: 26rem;
           padding: 1.8rem 2.4rem;
-          a {
-            transition: all 0.2s ease;
+          @include mobile() {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            text-align: left;
           }
-          a:hover {
-            color: #dd3333 !important;
+          .svg-icon {
+            width: 1rem;
+            height: 1rem;
           }
           .create-time {
             font-size: 0.75rem;
-            i {
-              font-size: 0.875rem;
-              margin-right: 0.5rem;
+            .svg-icon {
+              margin: -0.1rem 0.5rem 0 0;
             }
           }
           .post-title {
             text-decoration: none;
-            color: rgb(80, 78, 78);
+            @include font_color("post-title");
             h2 {
               font-size: 1.3rem;
               line-height: 1.6rem;
@@ -319,6 +356,9 @@ export default {
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
+              @include mobile() {
+                line-height: 1.3rem;
+              }
             }
           }
           .post-meta {
@@ -327,13 +367,17 @@ export default {
               margin-right: 1.2rem;
               line-height: 1.2rem;
               color: #888;
+              @include font_color("post-meta");
               a {
-                color: #888;
+                @include font_color("post-meta");
+                &:hover {
+                  @include themeify {
+                    color: themed("post-hover") !important;
+                  }
+                }
               }
-              i {
-                margin-right: 0.3rem;
-                vertical-align: middle;
-                font-size: 0.875rem;
+              .svg-icon {
+                margin: -0.1rem 0.3rem 0 0;
               }
             }
           }
@@ -342,14 +386,35 @@ export default {
             margin: 1.1rem 0 0.5rem;
             font-size: 1.1rem;
             line-height: 1.6rem;
-            color: rgb(80, 78, 78);
+            @include font_color("post-content");
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 5;
             overflow: hidden;
+            @include mobile() {
+              min-height: 6rem;
+              margin: 1rem 0 0.5rem;
+            }
           }
           .post-menu {
-            color: #000;
+            .svg-icon {
+              width: 1.5rem;
+              height: 1.5rem;
+            }
+            @include font_color("post-content");
+            &:hover {
+              @include themeify {
+                color: themed("post-hover") !important;
+              }
+            }
+          }
+          .post-links {
+            transition: all 0.2s ease;
+            &:hover {
+              @include themeify {
+                color: themed("post-hover") !important;
+              }
+            }
           }
         }
       }

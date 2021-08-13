@@ -2,7 +2,7 @@
 <template>
   <div id="main-container">
     <Header />
-    <div @click="goTop" class="cat-top" :class="{ down: catDown }"></div>
+    <div v-if="!isMobile" @click="goTop" class="cat-top m-hidden" :class="{ down: catDown }"></div>
     <nuxt />
     <Footer />
   </div>
@@ -16,8 +16,14 @@ export default {
       catDown: false
     };
   },
+  computed: {
+    isMobile () {
+      return this.$store.state.isMobile
+    }
+  },
   mounted () {
-    window.addEventListener('scroll', this.scrollHandle)
+    document.documentElement.setAttribute('data-theme', 'default-theme')
+    !this.isMobile && window.addEventListener('scroll', this.scrollHandle)
   },
   methods: {
     scrollHandle: throttle(function () {
@@ -25,7 +31,14 @@ export default {
       this.catDown = scrollTop > 400
     }, 300),
     goTop () {
-      document.documentElement.scrollTop = 0
+      let top = document.documentElement.scrollTop || document.body.scrollTop
+      // 实现滚动效果
+      const timeTop = setInterval(() => {
+        document.body.scrollTop = document.documentElement.scrollTop = top -= 50
+        if (top <= 0) {
+          clearInterval(timeTop)
+        }
+      }, 10)
     }
   }
 }
@@ -34,6 +47,8 @@ export default {
 <style lang="scss" scope>
 #main-container {
   overflow-x: hidden;
+  @include background_color("bg-color");
+  @include theme_transition(background);
   .cat-top {
     width: 4.67rem;
     height: 0;
@@ -47,9 +62,11 @@ export default {
       auto;
     transition: height 0.5s ease;
     animation: float 2s linear infinite;
+    cursor: pointer;
     &.down {
       height: 70vh;
     }
+    
   }
 }
 </style>

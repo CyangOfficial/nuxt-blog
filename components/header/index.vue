@@ -1,25 +1,28 @@
 <!--  -->
 <template>
   <header id="head-container" :class="{ 'scroll-top': isScrollTop }">
-    <div class="white-block"></div>
-    <nav class="navBar d-flex justify-content-between align-items-center">
+    <div class="bg-block"></div>
+    <nav class="navBar d-flex jc-between ai-center">
       <a href="" class="yang-logo"></a>
-      <div class="nav-content d-flex align-items-center">
+      <div class="nav-content d-flex ai-center">
+        <div class="menu-icon">
+          <svg-icon name="menu" />
+        </div>
         <div class="navs d-flex">
           <nuxt-link class="nav_link" to="/"
-            ><i class="nav-icon bi bi-house-door-fill"></i>首页</nuxt-link
+            ><svg-icon name="house" />首页</nuxt-link
           >
           <nuxt-link class="nav_link" to="/article"
-            ><i class="nav-icon bi bi-file-earmark-post"></i>文章</nuxt-link
+            ><svg-icon name="post" />文章</nuxt-link
           >
           <nuxt-link class="nav_link" to="/categories"
-            ><i class="nav-icon bi bi-bookmarks-fill"></i>分类</nuxt-link
+            ><svg-icon name="bookmarks" />分类</nuxt-link
           >
           <nuxt-link class="nav_link" to="/about"
-            ><i class="nav-icon bi bi-file-person-fill"></i>关于</nuxt-link
+            ><svg-icon name="person" />关于</nuxt-link
           >
         </div>
-        <div class="search-box d-flex align-items-center">
+        <!-- <div class="search-box d-flex align-items-center">
           <button type="submit">
             <i class="bi bi-search"></i>
           </button>
@@ -30,15 +33,23 @@
             type="search"
             placeholder="搜点什么呢？"
           />
+        </div> -->
+        <div class="right-btn d-flex ai-center">
+          <button type="search" class="search-btn">
+            <svg-icon name="search"></svg-icon>
+          </button>
+          <button
+            class="theme-button"
+            :class="{
+              'default-theme': blogTheme === 'default-theme',
+              'dark-theme': blogTheme === 'dark-theme',
+            }"
+            @click="$store.commit('toogleTheme')"
+          >
+            <svg-icon name="sun" class="svg-theme"></svg-icon>
+            <svg-icon name="moon" class="svg-theme"></svg-icon>
+          </button>
         </div>
-        <button
-          class="theme-button"
-          :class="{ 'light-theme': defaultTheme, 'dark-theme': !defaultTheme }"
-          @click="changeTheme"
-        >
-          <svg-icon name="sun" class="svg-theme"></svg-icon>
-          <svg-icon name="moon" class="svg-theme"></svg-icon>
-        </button>
       </div>
     </nav>
     <div class="search-panel"></div>
@@ -70,7 +81,16 @@ export default {
       immediate: true
     }
   },
+  computed: {
+    blogTheme () {
+      return this.$store.state.blogTheme
+    }
+  },
+  created () {
+
+  },
   mounted () {
+    this.$store.commit('initStoreHandle')
     window.addEventListener('scroll', this.scrollHandle)
   },
   methods: {
@@ -78,10 +98,7 @@ export default {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
       this.isScrollTop = scrollTop === 0
       // if (scrollTop > 300) { }
-    }, 200),
-    changeTheme () {
-      this.defaultTheme = !this.defaultTheme
-    }
+    }, 200)
   }
 }
 </script>
@@ -96,18 +113,29 @@ export default {
   z-index: 5;
   transition: all 0.5s ease;
   opacity: 1;
-  .white-block {
-    background: rgba(255, 255, 255, 0.95);
+  @include mobile() {
+    padding: 0.4rem 1rem;
+  }
+  .bg-block {
     width: 100%;
     height: 100%;
     position: absolute;
     left: 0;
     top: 0;
     z-index: -1;
+    @include theme_transition(background);
+    @include mobile(pc) {
+      @include background_color("bg-color");
+    }
+    @include mobile() {
+      @include background_color("m-header-bg");
+      backdrop-filter: blur(5px);
+      // display: none;
+      &.scroll-top {
+        box-shadow: none;
+      }
+    }
   }
-  // &.scroll-top {
-  //   opacity: 0;
-  // }
   &:hover {
     opacity: 1;
   }
@@ -116,24 +144,55 @@ export default {
       display: block;
       height: 50px;
       width: 230px;
-      // background: #000;
       background: url("~/assets/images/blog-logo.png") no-repeat center / cover;
+    }
+    .menu-icon {
+      display: none;
+      @include mobile() {
+        display: block;
+        @include font_color("m-header");
+        .svg-icon {
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+    }
+
+    @include mobile() {
+      .yang-logo {
+        display: none;
+      }
+      .nav-content {
+        @include mobile() {
+          flex: 1;
+          justify-content: space-between;
+          width: 100%;
+        }
+        .navs {
+          display: none;
+        }
+      }
     }
     .navs {
       height: 100%;
       margin-right: 2rem;
       .nav_link {
         display: block;
-        color: #6e6e6e;
+        @include font_color("navs-color");
         text-decoration: none;
         font-size: 1.1rem;
         margin-left: 1.6rem;
         height: 4.5rem;
         line-height: 4.5rem;
         position: relative;
-        transition: color 0.3s;
+        @include theme_transition(color);
         .nav-icon {
           margin-right: 0.4rem;
+        }
+        .svg-icon {
+          width: 1.1rem;
+          height: 1.1rem;
+          margin: -0.2rem 0.4rem 0 0;
         }
         &::after {
           content: "";
@@ -146,10 +205,10 @@ export default {
           transition: all 0.3s;
         }
         &:hover {
-          color: #ffaa0d;
+          color: #ffaa0d !important;
           .nav-icon {
             display: inline-block;
-            animation: shaking 5s ease infinite;
+            animation: shaking 5s infinite ease-in-out;
           }
           &::after {
             width: 100%;
@@ -164,6 +223,7 @@ export default {
       padding: 0 0.4rem;
       height: 2.3rem;
       margin-right: 2rem;
+      @include border-color("navs-color");
       button {
         border: none;
         background: none;
@@ -171,26 +231,51 @@ export default {
         font-size: 1rem;
         padding: 0;
         margin-right: 0.5rem;
+        cursor: pointer;
+        @include font_color("navs-color");
       }
       input {
         border: none;
         outline: none;
         padding: 0;
-        height: 1rem;
+        height: 1.2rem;
         background: transparent;
-        color: #666;
+        @include font_color("navs-color");
         font-size: 0.9rem;
         width: 14rem;
         &::placeholder {
           font-size: 0.9rem;
           line-height: 1.5rem;
-          color: #8f8484;
+          @include font_color("navs-color");
+        }
+      }
+    }
+    .search-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      margin: 0 1rem;
+      cursor: pointer;
+      background: none;
+      outline: none;
+      border: none;
+      @include mobile() {
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .svg-icon {
+        @include mobile() {
+          @include font_color("m-header");
+        }
+        @include mobile(pc) {
+          @include font_color("navs-color");
         }
       }
     }
     .theme-button {
-      width: 8rem;
-      height: 3rem;
+      width: 5rem;
+      height: 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -198,7 +283,8 @@ export default {
       border-radius: 1.5rem;
       transition: all 0.5s;
       overflow: hidden;
-      &.light-theme {
+      cursor: pointer;
+      &.default-theme {
         background: linear-gradient(rgb(57, 89, 138), rgb(121, 215, 237));
         .icon-moon {
           transform: translateY(-5rem);
@@ -217,7 +303,7 @@ export default {
         }
       }
       .svg-theme {
-        width: 2rem;
+        width: 1.6rem;
         transform: translateY(0);
         transition: all 0.5s;
       }

@@ -1,0 +1,43 @@
+$white: rgb(245, 246, 247);
+$gray1: rgb(203, 200, 192);
+
+$default-theme : (
+  bg-color: #fff,
+  notice-color: #969696,
+  notice-bg-color: #fbfbfb,
+  notice-border: rgb(29, 31, 39),
+  navs-color: #6e6e6e,
+  border-color: #8f8484,
+  section-title: #666666,
+  post-title: #504e4e,
+  post-meta: #969696,
+  post-create-time: #969696,
+  post-content: #504e4e,
+  post-bg: #fff,
+  post-hover: #dd3333,
+  m-header-bg: rgba(255, 255, 255, 0.2),
+  m-header: $white
+);
+$dark-theme: (
+  bg-color: #181a1b,
+  notice-bg-color: #1d1f27,
+  notice-border: rgb(230, 230, 230),
+  notice-color: $white,
+  navs-color: $white,
+  border-color: $white,
+  section-title: $white,
+  post-title: $white,
+  post-meta: #cbc8c0,
+  post-create-time: $gray1,
+  post-content: $white,
+  post-bg: #1d1f27,
+  post-hover: #a84141,
+  footer: $white,
+  m-header-bg: rgba(0, 0, 0, 0.2),
+  m-header: #dbdde4
+);
+
+$themes: (
+  default-theme: $default-theme,
+  dark-theme: $dark-theme
+);
