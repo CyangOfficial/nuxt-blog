@@ -2,7 +2,19 @@
 <template>
   <div id="main-container">
     <Header />
-    <div v-if="!isMobile" @click="goTop" class="cat-top m-hidden" :class="{ down: catDown }"></div>
+    <Sidebar />
+    <div
+      v-if="!isMobile"
+      @click="goTop"
+      class="cat-top m-hidden"
+      :class="{ down: catDown }"
+    ></div>
+    <div
+      @click="clickMask"
+      ref="layer"
+      class="mask-layer"
+      :class="{ show: sidebarOpened }"
+    ></div>
     <nuxt />
     <Footer />
   </div>
@@ -10,15 +22,34 @@
 
 <script>
 import { throttle } from '@/utils'
+import Sidebar from '@/components/Sidebar'
+import { lock, unlock } from 'tua-body-scroll-lock'
 export default {
   data () {
     return {
       catDown: false
     };
   },
+  components: {
+    Sidebar
+  },
   computed: {
     isMobile () {
       return this.$store.state.isMobile
+    },
+    sidebarOpened () {
+      return this.$store.state.sidebarOpened
+    }
+  },
+  watch: {
+    '$store.state.sidebarOpened' (n, o) {
+      if (n) {
+        const layer = this.$refs['layer']
+        // const sidebar = document.querySelector('#sidebar')
+        lock(layer)
+      } else {
+        unlock()
+      }
     }
   },
   mounted () {
@@ -39,6 +70,9 @@ export default {
           clearInterval(timeTop)
         }
       }, 10)
+    },
+    clickMask () {
+      this.$store.commit('toggleSidebar')
     }
   }
 }
@@ -66,7 +100,19 @@ export default {
     &.down {
       height: 70vh;
     }
-    
+  }
+  .mask-layer {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    z-index: 9;
+    left: 0;
+    top: 0;
+    display: none;
+    &.show {
+      display: block;
+    }
   }
 }
 </style>

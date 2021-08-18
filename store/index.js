@@ -2,7 +2,8 @@ import { setItem, getItem } from '@/utils/storage'
 
 export const state = () => ({
   blogTheme: 'default-theme',
-  isMobile: false
+  isMobile: false,
+  sidebarOpened: false
 })
 
 export const mutations = {
@@ -13,9 +14,9 @@ export const mutations = {
     document.documentElement.setAttribute('data-theme', theme)
   },
   initTheme (state) {
-    const getTheme = getItem('blog-theme') || setItem('blog-theme', 'default-theme')
-    state.blogTheme = getTheme
-    document.documentElement.setAttribute('data-theme', getTheme)
+    const defaultTheme = getItem('blog-theme') || setItem('blog-theme', 'default-theme')
+    state.blogTheme = defaultTheme
+    document.documentElement.setAttribute('data-theme', defaultTheme)
   },
   isMobile (state) {
     const reg = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
@@ -26,5 +27,8 @@ export const mutations = {
   initStoreHandle () {
     this.commit('initTheme')
     this.commit('isMobile')
+  },
+  toggleSidebar (state) {
+    state.sidebarOpened = !state.sidebarOpened
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="post-loader-wrap">
-    <no-ssr>
+    <client-only>
       <div class="pc-loader" v-if="!isMobile">
         <ContentLoader
           :width="944"
@@ -41,16 +41,12 @@
           <rect x="50" y="1060" rx="3" ry="3" width="700" height="22" />
         </ContentLoader>
       </div>
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 
 <script>
-import { ContentLoader } from 'vue-content-loader'
 export default {
-  components: {
-    ContentLoader
-  },
   computed: {
     isMobile () {
       return this.$store.state.isMobile

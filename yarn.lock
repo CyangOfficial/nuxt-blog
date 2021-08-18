@@ -8525,6 +8525,11 @@ tty-browserify@0.0.0:
   resolved "https://registry.nlark.com/tty-browserify/download/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
   integrity sha1-oVe6QC2iTpv5V/mqadUk7tQpAaY=
 
+tua-body-scroll-lock@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.nlark.com/tua-body-scroll-lock/download/tua-body-scroll-lock-1.2.1.tgz#a45b428a61ff41e7cccded11c2095d44ac02536e"
+  integrity sha1-pFtCimH/QefMze0RwgldRKwCU24=
+
 tunnel-agent@^0.6.0:
   version "0.6.0"
   resolved "https://registry.nlark.com/tunnel-agent/download/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"

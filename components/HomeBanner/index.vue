@@ -100,7 +100,7 @@ export default {
       @include mobile() {
         white-space: nowrap;
         transform: scale(0.6);
-        margin: 10rem 0 1rem;
+        margin: 12rem 0 1rem;
       }
       &::before {
         left: -1px;

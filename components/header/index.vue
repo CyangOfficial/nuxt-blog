@@ -5,7 +5,7 @@
     <nav class="navBar d-flex jc-between ai-center">
       <a href="" class="yang-logo"></a>
       <div class="nav-content d-flex ai-center">
-        <div class="menu-icon">
+        <div class="menu-icon" @click="$store.commit('toggleSidebar')">
           <svg-icon name="menu" />
         </div>
         <div class="navs d-flex">
