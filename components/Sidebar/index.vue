@@ -9,7 +9,7 @@
         <h2 class="sub-name">楊的博客 &amp; 编程笔记</h2>
         <div class="meta-intro d-flex jc-center">
           <div class="item posts">
-            <nuxt-link to="/" class="meta-link">
+            <nuxt-link to="/post" class="meta-link">
               <span class="num">0</span>
               <span class="tit">文章</span>
             </nuxt-link>
@@ -43,7 +43,7 @@
         <nuxt-link to="/" class="nav-item"
           ><svg-icon name="house" />首页</nuxt-link
         >
-        <nuxt-link to="/" class="nav-item"
+        <nuxt-link to="/post" class="nav-item"
           ><svg-icon name="post" />文章</nuxt-link
         >
         <nuxt-link to="/" class="nav-item"
@@ -79,7 +79,8 @@ export default {
 #sidebar {
   width: 60vw;
   height: 100vh;
-  background-color: #fff;
+  // background-color: #fff;
+  @include background_color('bg-color');
   position: fixed;
   top: 0;
   left: 0;
@@ -89,6 +90,9 @@ export default {
   box-shadow: 3px 0 10px rgba(0, 0, 0, 0.5);
   &.open {
     transform: translateX(0);
+  }
+  @include mobile(pc) {
+    display: none;
   }
   .overview {
     width: 100%;
@@ -106,13 +110,14 @@ export default {
       }
       .sub-name {
         font-size: 1rem;
-        color: #999;
+        // color: #999;
+        @include font_color('sidebar-tit2');
         font-weight: normal;
         line-height: 2em;
       }
       .name {
         font-size: 0.9rem;
-        color: #000;
+        @include font_color('sidebar-tit1');
         line-height: 2em;
         font-weight: 400;
         margin-top: 1rem;
@@ -142,6 +147,7 @@ export default {
           }
           .meta-link {
             color: #666;
+            @include font_color('sidebar-tit3');
             text-align: center;
             span {
               display: block;
@@ -170,7 +176,8 @@ export default {
       flex-direction: column;
       margin-top: 2rem;
       .nav-item {
-        color: rgb(70, 70, 70);
+        // color: rgb(70, 70, 70);
+        @include font_color('sidebar-navs');
         // margin-top: 2rem;
         line-height: 3em;
         .svg-icon {

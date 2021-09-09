@@ -1,5 +1,9 @@
 $white: rgb(245, 246, 247);
-$gray1: rgb(203, 200, 192);
+$gray1: #CBC8C0;
+$gray2: #969696;
+$gray6: #666;
+
+$white1: #f5f6f7;
 
 $default-theme : (
   bg-color: #fff,
@@ -16,7 +20,15 @@ $default-theme : (
   post-bg: #fff,
   post-hover: #dd3333,
   m-header-bg: rgba(255, 255, 255, 0.2),
-  m-header: $white
+  m-header: $white,
+  sidebar-bg: #fff,
+  sidebar-tit1: #000,
+  sidebar-tit2: #999,
+  sidebar-tit3: #666,
+  sidebar-navs: #464646,
+  post-r-text1: $gray6,
+  ranking-bg: rgba(245, 245, 245, 0.8),
+  ranking-link: $gray2
 );
 $dark-theme: (
   bg-color: #181a1b,
@@ -34,7 +46,15 @@ $dark-theme: (
   post-hover: #a84141,
   footer: $white,
   m-header-bg: rgba(0, 0, 0, 0.2),
-  m-header: #dbdde4
+  m-header: #dbdde4,
+  sidebar-bg: #21252B,
+  sidebar-tit1: #FFF,
+  sidebar-tit2: #f0f0f0,
+  sidebar-tit3: #f0f0f0,
+  sidebar-navs: #eaeaea,
+  post-r-text1: $white1,
+  ranking-bg: rgba(27, 29, 30, 0.8),
+  ranking-link: $gray1
 );
 
 $themes: (

@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div id="main-container">
+  <main id="main-container">
     <Header />
     <Sidebar />
     <div
@@ -17,7 +17,7 @@
     ></div>
     <nuxt />
     <Footer />
-  </div>
+  </main>
 </template>
 
 <script>
@@ -50,6 +50,12 @@ export default {
       } else {
         unlock()
       }
+    },
+    $route (n, o) {
+      if (this.$store.state.isMobile) {
+        this.$store.commit('toggleSidebar', false)
+      }
+      // console.log(n, o)
     }
   },
   mounted () {
@@ -62,14 +68,10 @@ export default {
       this.catDown = scrollTop > 400
     }, 300),
     goTop () {
-      let top = document.documentElement.scrollTop || document.body.scrollTop
-      // 实现滚动效果
-      const timeTop = setInterval(() => {
-        document.body.scrollTop = document.documentElement.scrollTop = top -= 50
-        if (top <= 0) {
-          clearInterval(timeTop)
-        }
-      }, 10)
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     },
     clickMask () {
       this.$store.commit('toggleSidebar')
@@ -110,8 +112,10 @@ export default {
     left: 0;
     top: 0;
     display: none;
-    &.show {
-      display: block;
+    @include mobile() {
+      &.show {
+        display: block;
+      }
     }
   }
 }

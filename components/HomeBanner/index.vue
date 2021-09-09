@@ -5,14 +5,19 @@
       class="banner-img d-flex ai-center jc-center"
       :style="{ backgroundImage: 'url(' + coverImg + ')' }"
     >
+      <!-- <div class="m-banner">
+        <picture>
+          <source srcset="" media="(max-width: 996px)">
+        </picture>
+      </div> -->
       <section class="focus-info">
         <h1
-          class="center-text glitch is-glitching Ubuntu-font"
+          class="center-text glitch is-glitching Ubuntu-font m-hidden"
           :data-text="bannerTitle"
         >
           {{ bannerTitle }}
         </h1>
-        <div class="header-info">
+        <div class="header-info m-hidden">
           <p class="sub-title">{{ subTitle }}</p>
           <div class="top-social d-flex jc-center">
             <a href="https://github.com/CyangOfficial" target="_blank">
@@ -36,7 +41,8 @@ export default {
     return {
       title: 'Hi, Cyang!',
       subTitle: '一沙一世界，一花一天堂。君掌盛无边，刹那成永恒。',
-      coverImg: 'https://s3-hk.2heng.xin/mstdn/static/blog/cover/webp/d8c29cad010447a75b0eaae4513f3780.jpg.webp'
+      // coverImg: 'https://s3-hk.2heng.xin/mstdn/static/blog/cover/webp/d8c29cad010447a75b0eaae4513f3780.jpg.webp'
+      coverImg: require('@/assets/images/wallhaven-wyrr9x.jpg')
     };
   },
   computed: {
@@ -63,6 +69,19 @@ export default {
     background-attachment: fixed;
     background-image: url("https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/images/dot.gif");
   }
+  &::after {
+    content: "";
+    width: 150%;
+    height: 4.375rem;
+    @include background_color("bg-color");
+    @include theme_transition(background);
+    left: -25%;
+    bottom: -2.875rem;
+    border-radius: 100%;
+    position: absolute;
+    z-index: 4;
+    display: none;
+  }
   .banner-img {
     background-position: top center;
     background-repeat: no-repeat;
@@ -76,6 +95,7 @@ export default {
       width: 100vw;
       background-attachment: scroll;
       align-items: flex-start;
+      height: 65vh;
     }
     img {
       width: 100%;
@@ -99,8 +119,8 @@ export default {
       user-select: none;
       @include mobile() {
         white-space: nowrap;
-        transform: scale(0.6);
-        margin: 12rem 0 1rem;
+        transform: scale(0.4);
+        margin: 6rem 0 1rem;
       }
       &::before {
         left: -1px;
@@ -161,7 +181,7 @@ export default {
           text-align: center;
           .svg-icon {
             &.icon-wechat {
-              color: #07C160;
+              color: #07c160;
             }
             &.icon-github {
               color: #5052d1;

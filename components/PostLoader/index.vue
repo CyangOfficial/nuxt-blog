@@ -58,12 +58,6 @@ export default {
       return this.$store.state.blogTheme === 'default-theme' ? '#ecebeb' : '#3e4041'
     }
   },
-  data () {
-    return {
-
-    }
-  },
-  methods: {},
 }
 </script>
 <style lang='scss'>

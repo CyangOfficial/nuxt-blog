@@ -12,7 +12,7 @@
           <nuxt-link class="nav_link" to="/"
             ><svg-icon name="house" />首页</nuxt-link
           >
-          <nuxt-link class="nav_link" to="/article"
+          <nuxt-link class="nav_link" to="/post"
             ><svg-icon name="post" />文章</nuxt-link
           >
           <nuxt-link class="nav_link" to="/categories"
@@ -123,6 +123,8 @@ export default {
     left: 0;
     top: 0;
     z-index: -1;
+    opacity: 0.9;
+    backdrop-filter: blur(5px);
     @include theme_transition(background);
     @include mobile(pc) {
       @include background_color("bg-color");
@@ -206,7 +208,7 @@ export default {
         }
         &:hover {
           color: #ffaa0d !important;
-          .nav-icon {
+          .svg-icon {
             display: inline-block;
             animation: shaking 5s infinite ease-in-out;
           }

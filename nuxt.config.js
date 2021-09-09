@@ -1,7 +1,7 @@
 const path = require('path')
 export default {
   server: {
-    host: '192.168.5.80',
+    host: 'localhost',
     port: '8080'
   },
   // mode: 'spa',

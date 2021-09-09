@@ -33,41 +33,8 @@
       <div class="skeleton-wrap" v-if="!postList.length">
         <PostLoader v-for="item in 3" :key="item" />
       </div>
-      <div class="latest-posts" v-if="postList.length">
-        <section
-          class="item-post d-flex"
-          v-for="(item, index) in postList"
-          :key="index"
-        >
-          <nuxt-link to="/article" class="post-cover">
-            <img :src="item.coverImg" :alt="item.title" />
-          </nuxt-link>
-          <div class="post-wrap">
-            <p class="create-time">
-              <svg-icon name="time" />发布于：{{ item.createAt }}
-            </p>
-            <nuxt-link to="/article" class="post-links post-title">
-              <h2>{{ item.title }}</h2>
-            </nuxt-link>
-            <div class="post-meta">
-              <span class="item-meta"
-                ><svg-icon name="eye" />{{ item.pv }}</span
-              >
-              <span class="item-meta"
-                ><svg-icon name="heart_hollow" />{{ item.likes }}</span
-              >
-              <span class="item-meta">
-                <nuxt-link to="/article"
-                  ><svg-icon name="folder" />{{ item.tag }}</nuxt-link
-                >
-              </span>
-            </div>
-            <p class="post-intro">{{ item.intro }}</p>
-            <nuxt-link to="/article" class="post-menu m-hidden">
-              <svg-icon name="ellipsis"></svg-icon>
-            </nuxt-link>
-          </div>
-        </section>
+      <div class="latest-posts" v-else>
+        <PostItem :postList="postList" />
       </div>
     </section>
   </section>
@@ -77,12 +44,14 @@
 import HomeBanner from '@/components/HomeBanner'
 import PostLoader from '@/components/PostLoader'
 import Sidebar from '@/components/Sidebar'
+import PostItem from '@/components/PostItem'
 export default {
   name: 'Home',
   components: {
     HomeBanner,
     PostLoader,
-    Sidebar
+    Sidebar,
+    PostItem
   },
   data () {
     return {
@@ -161,6 +130,19 @@ export default {
     async postHandle () {
       const list = await this.fetchPostData()
       this.postList = list
+      setTimeout(() => {
+        this.postList.push({
+          coverImg: 'https://sakura.2heng.xin/wp-content/uploads/2018/05/r63888719_by__LM7_-1024x534.jpg',
+          createAt: '2023-01-02',
+          title: 'javajavajava',
+          pv: 1310,
+          likes: 432,
+          tag: 'java',
+          intro: `一直以来，习惯在 flex 布局中使用 gap
+                      这个属性设置间距，一直以来也都是在最新的 Chrome
+                      上调试，所以从来没有想在 flex gap 在其他`
+        })
+      }, 2000)
     }
   }
 }
@@ -286,142 +268,8 @@ export default {
         }
       }
     }
-
-    .latest-posts {
-      .item-post {
-        width: 100%;
-        height: 20rem;
-        margin-bottom: 3rem;
-        color: #969696;
-        box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 20px -8px;
-        overflow: hidden;
-        border-radius: 0.5rem;
-        text-align: right;
-        @include background_color("post-bg");
-        @include theme_transition(background);
-        @include mobile(pc) {
-          &:nth-of-type(2n) {
-            flex-direction: row-reverse;
-            text-align: left;
-          }
-        }
-        @include mobile() {
-          height: auto;
-          flex-direction: column;
-        }
-        .post-cover {
-          width: 33rem;
-          overflow: hidden;
-          &:hover {
-            img {
-              transform: scale(1.05);
-            }
-          }
-          img {
-            width: 100%;
-            min-height: 100%;
-            transition: all 0.5s ease;
-          }
-          @include mobile() {
-            width: 100%;
-            height: 14rem;
-          }
-        }
-        .post-wrap {
-          width: 26rem;
-          padding: 1.8rem 2.4rem;
-          @include mobile() {
-            width: 100%;
-            padding: 0.6rem 1rem;
-            text-align: left;
-          }
-          .svg-icon {
-            width: 1rem;
-            height: 1rem;
-          }
-          .create-time {
-            font-size: 0.75rem;
-            line-height: 2em;
-            .svg-icon {
-              margin: -0.1rem 0.5rem 0 0;
-            }
-          }
-          .post-title {
-            text-decoration: none;
-            @include font_color("post-title");
-            h2 {
-              font-size: 1.3rem;
-              line-height: 3rem;
-              font-weight: 700;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              @include mobile() {
-                line-height: 2em;
-              }
-            }
-          }
-          .post-meta {
-            line-height: 2em;
-            @include mobile() {
-              line-height: 1.5em;
-            };
-            .item-meta {
-              font-size: 0.75rem;
-              margin-right: 1.2rem;
-              color: #888;
-              @include font_color("post-meta");
-              a {
-                @include font_color("post-meta");
-                &:hover {
-                  @include themeify {
-                    color: themed("post-hover") !important;
-                  }
-                }
-              }
-              .svg-icon {
-                margin: -0.1rem 0.3rem 0 0;
-              }
-            }
-          }
-          .post-intro {
-            min-height: 8rem;
-            margin: 0.8rem 0 0.6rem;
-            font-size: 1.1rem;
-            line-height: 1.5em;
-            @include font_color("post-content");
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 5;
-            overflow: hidden;
-            @include mobile() {
-              min-height: 6rem;
-              margin: 0.8rem 0 0.6rem;
-            }
-          }
-          .post-menu {
-            .svg-icon {
-              width: 1.5rem;
-              height: 1.5rem;
-            }
-            @include font_color("post-content");
-            &:hover {
-              @include themeify {
-                color: themed("post-hover") !important;
-              }
-            }
-          }
-          .post-links {
-            transition: all 0.2s ease;
-            &:hover {
-              @include themeify {
-                color: themed("post-hover") !important;
-              }
-            }
-          }
-        }
-      }
-    }
+    // .latest-posts {
+    // }
   }
 }
 </style>

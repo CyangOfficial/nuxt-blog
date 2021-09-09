@@ -28,7 +28,10 @@ export const mutations = {
     this.commit('initTheme')
     this.commit('isMobile')
   },
-  toggleSidebar (state) {
+  toggleSidebar (state, status) {
+    if (typeof status === 'boolean') {
+      return state.sidebarOpened = status
+    }
     state.sidebarOpened = !state.sidebarOpened
   }
 }
