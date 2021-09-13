@@ -22,6 +22,7 @@
         <h3 class="r-head d-flex ai-center">
           <svg-icon name="ranking" />排行榜
         </h3>
+        <RankingLoader primaryColor="#" />
         <div class="ranking-list">
           <nuxt-link
             v-for="(item, index) in rankingList"
@@ -64,8 +65,11 @@
 </template>
 
 <script>
+import RankingLoader from '@/components/RankingLoader'
 export default {
-  name: '',
+  components: {
+    RankingLoader
+  },
   data () {
     return {
       postList: [],

@@ -41,45 +41,45 @@
 </template>
 
 <script>
-import HomeBanner from '@/components/HomeBanner'
-import PostLoader from '@/components/PostLoader'
-import Sidebar from '@/components/Sidebar'
-import PostItem from '@/components/PostItem'
+import HomeBanner from "@/components/HomeBanner";
+import PostLoader from "@/components/PostLoader";
+import Sidebar from "@/components/Sidebar";
+import PostItem from "@/components/PostItem";
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     HomeBanner,
     PostLoader,
     Sidebar,
-    PostItem
+    PostItem,
   },
-  data () {
+  data() {
     return {
-      notice: '欢迎来到我的博客~',
+      notice: "欢迎来到我的博客~",
       newReleaseData: Object.freeze([
         {
-          href: 'https://github.com/CyangOfficial/nuxt-blog',
-          title: 'Cyang Nuxt Blog',
-          intro: '基于 Nuxt 实现的个人博客',
-          img: require('@/assets/images/blog-section-cover.jpg')
+          href: "https://github.com/CyangOfficial/nuxt-blog",
+          title: "Cyang Nuxt Blog",
+          intro: "基于 Nuxt 实现的个人博客",
+          img: require("@/assets/images/blog-section-cover.jpg"),
         },
         {
-          href: 'https://github.com/CyangOfficial/nuxt-blog',
-          title: 'Admin Manager',
-          intro: 'vue3.0 elementui-plus',
-          img: require('@/assets/images/admin-1.jpg')
+          href: "https://github.com/CyangOfficial/nuxt-blog",
+          title: "Admin Manager",
+          intro: "vue3.0 elementui-plus",
+          img: require("@/assets/images/admin-1.jpg"),
         },
         {
-          href: 'https://github.com/CyangOfficial/nuxt-blog',
-          title: 'Nest Server',
-          intro: '基于 express 的 Nest 框架',
-          img: require('@/assets/images/coding.jpg')
-        }
+          href: "https://github.com/CyangOfficial/nuxt-blog",
+          title: "Nest Server",
+          intro: "基于 express 的 Nest 框架",
+          img: require("@/assets/images/coding.jpg"),
+        },
       ]),
-      postList: []
-    }
+      postList: [],
+    };
   },
-  async asyncData ({ params }) {
+  async asyncData({ params }) {
     // console.log(params)
     // const postList = await new Promise((resolve) => {
     //   let postList = []
@@ -102,50 +102,52 @@ export default {
     // })
     // return { postList }
   },
-  created () {
-    this.postHandle()
+  created() {
+    this.postHandle();
   },
   methods: {
-    fetchPostData () {
+    fetchPostData() {
       return new Promise((resolve) => {
         setTimeout(() => {
-          const postList = []
+          const postList = [];
           for (let i = 0; i < 5; i++) {
             postList.push({
-              coverImg: 'https://sakura.2heng.xin/wp-content/uploads/2018/05/r63888719_by__LM7_-1024x534.jpg',
-              createAt: '2021-08-02',
-              title: 'WebP 全方位能力检测',
+              coverImg:
+                "https://sakura.2heng.xin/wp-content/uploads/2018/05/r63888719_by__LM7_-1024x534.jpg",
+              createAt: "2021-08-02",
+              title: "WebP 全方位能力检测",
               pv: 100,
               likes: 15,
-              tag: 'javascript',
+              tag: "javascript",
               intro: `一直以来，习惯在 flex 布局中使用 gap
                       这个属性设置间距，一直以来也都是在最新的 Chrome
-                      上调试，所以从来没有想在 flex gap 在其他`
-            })
+                      上调试，所以从来没有想在 flex gap 在其他`,
+            });
           }
-          resolve(postList)
-        }, 3000)
-      })
+          resolve(postList);
+        }, 3000);
+      });
     },
-    async postHandle () {
-      const list = await this.fetchPostData()
-      this.postList = list
+    async postHandle() {
+      const list = await this.fetchPostData();
+      this.postList = list;
       setTimeout(() => {
         this.postList.push({
-          coverImg: 'https://sakura.2heng.xin/wp-content/uploads/2018/05/r63888719_by__LM7_-1024x534.jpg',
-          createAt: '2023-01-02',
-          title: 'javajavajava',
+          coverImg:
+            "https://sakura.2heng.xin/wp-content/uploads/2018/05/r63888719_by__LM7_-1024x534.jpg",
+          createAt: "2023-01-02",
+          title: "javajavajava",
           pv: 1310,
           likes: 432,
-          tag: 'java',
+          tag: "java",
           intro: `一直以来，习惯在 flex 布局中使用 gap
                       这个属性设置间距，一直以来也都是在最新的 Chrome
-                      上调试，所以从来没有想在 flex gap 在其他`
-        })
-      }, 2000)
-    }
-  }
-}
+                      上调试，所以从来没有想在 flex gap 在其他`,
+        });
+      }, 2000);
+    },
+  },
+};
 </script>
 <style lang="scss" scope>
 #home-container {
