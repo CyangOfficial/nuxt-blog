@@ -1,4 +1,3 @@
-<!--  -->
 <template>
   <svg :class="svgClass" aria-hidden="true">
     <use :xlink:href="iconName" />
@@ -7,6 +6,7 @@
 
 <script>
 export default {
+  name: 'SvgIcon',
   props: {
     name: {
       type: String,

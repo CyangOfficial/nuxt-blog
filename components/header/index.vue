@@ -64,7 +64,7 @@ export default {
     return {
       isScrollTop: true,
       defaultTheme: true
-    };
+    }
   },
   watch: {
     $route: {

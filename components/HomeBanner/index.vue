@@ -43,7 +43,7 @@ export default {
       subTitle: '一沙一世界，一花一天堂。君掌盛无边，刹那成永恒。',
       // coverImg: 'https://s3-hk.2heng.xin/mstdn/static/blog/cover/webp/d8c29cad010447a75b0eaae4513f3780.jpg.webp'
       coverImg: require('@/assets/images/wallhaven-wyrr9x.jpg')
-    };
+    }
   },
   computed: {
     bannerTitle () {

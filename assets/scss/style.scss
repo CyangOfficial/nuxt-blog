@@ -6,7 +6,10 @@
 }
 
 body {
-  cursor: url('https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/cursor/normal.cur'), auto;
+  @include mobile(pc) {
+    cursor: url('https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/cursor/normal.cur'), auto;
+  }
+  
   background-color: #fff;
   background-attachment: fixed;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -19,6 +22,11 @@ a {
 
 p, h1, h2, h3 {
   margin: 0;
+}
+
+ul,li {
+  margin: 0;
+  padding: 0;
 }
 
 .svg-icon {

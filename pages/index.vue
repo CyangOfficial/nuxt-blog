@@ -34,7 +34,15 @@
         <PostLoader v-for="item in 3" :key="item" />
       </div>
       <div class="latest-posts" v-else>
-        <PostItem :postList="postList" />
+        <PostItem
+          ref="postWrap"
+          :postList="postList"
+          :pageSize="postParams.pageSize"
+        />
+        <div v-if="postLoading" class="foot-loading">
+          <SvgIcon name="ellipsis-loading" />
+        </div>
+        <!-- <p v-if="postLoading" class="foot-loading">加载中...</p> -->
       </div>
     </section>
   </section>
@@ -45,6 +53,8 @@ import HomeBanner from "@/components/HomeBanner";
 import PostLoader from "@/components/PostLoader";
 import Sidebar from "@/components/Sidebar";
 import PostItem from "@/components/PostItem";
+import { getPosts } from "@/api/post";
+import SvgIcon from "../components/SvgIcon/index.vue";
 export default {
   name: "Home",
   components: {
@@ -52,7 +62,9 @@ export default {
     PostLoader,
     Sidebar,
     PostItem,
+    SvgIcon
   },
+  scrollToTop: false,
   data() {
     return {
       notice: "欢迎来到我的博客~",
@@ -61,92 +73,99 @@ export default {
           href: "https://github.com/CyangOfficial/nuxt-blog",
           title: "Cyang Nuxt Blog",
           intro: "基于 Nuxt 实现的个人博客",
-          img: require("@/assets/images/blog-section-cover.jpg"),
+          img: require("@/assets/images/blog-section-cover.jpg")
         },
         {
           href: "https://github.com/CyangOfficial/nuxt-blog",
           title: "Admin Manager",
           intro: "vue3.0 elementui-plus",
-          img: require("@/assets/images/admin-1.jpg"),
+          img: require("@/assets/images/admin-1.jpg")
         },
         {
           href: "https://github.com/CyangOfficial/nuxt-blog",
           title: "Nest Server",
           intro: "基于 express 的 Nest 框架",
-          img: require("@/assets/images/coding.jpg"),
-        },
+          img: require("@/assets/images/coding.jpg")
+        }
       ]),
       postList: [],
+      postParams: {
+        page: 1,
+        pageSize: 5
+      },
+      postLoading: true,
+      loadMoreObserver: null,
+      lazyObserver: null
     };
   },
-  async asyncData({ params }) {
-    // console.log(params)
-    // const postList = await new Promise((resolve) => {
-    //   let postList = []
-    //   setTimeout(() => {
-    //     for (let i = 0; i < 5; i++) {
-    //       postList.push({
-    //         coverImg: 'https://sakura.2heng.xin/wp-content/uploads/2018/05/r63888719_by__LM7_-1024x534.jpg',
-    //         createAt: '2021-08-02',
-    //         title: 'WebP 全方位能力检测',
-    //         pv: 100,
-    //         likes: 15,
-    //         tag: 'javascript',
-    //         intro: `一直以来，习惯在 flex 布局中使用 gap
-    //                   这个属性设置间距，一直以来也都是在最新的 Chrome
-    //                   上调试，所以从来没有想在 flex gap 在其他`
-    //       })
-    //     }
-    //     resolve(postList)
-    //   }, 1000)
-    // })
-    // return { postList }
-  },
-  created() {
+  mounted() {
     this.postHandle();
   },
   methods: {
+    // 观察底部foot-loading是否进入可视区
+    observeLoadText() {
+      const footEl = document.querySelector(".foot-loading");
+      this.loadMoreObserver = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          this.postParams.page += 1;
+          this.postHandle();
+          this.loadMoreObserver.unobserve(entries[0].target);
+        }
+      });
+      this.loadMoreObserver.observe(footEl);
+    },
+    async postHandle() {
+      getPosts(this.postParams)
+        .then(res => {
+          const { result } = res;
+          if (result.items.length > 0) {
+            this.postList = [...this.postList, ...result.items];
+            this.$nextTick(() => {
+              this.observeLoadText();
+              // 从第2页开始懒加载
+              if (this.postParams.page > 1) {
+                const childItems = Array.from(
+                  this.$refs.postWrap.$el.childNodes
+                ).slice(this.postParams.pageSize * -1);
+                childItems.forEach(item => {
+                  const imgItem = item.querySelector(".poster-img");
+                  this.$refs.postWrap.observer.observe(imgItem);
+                });
+              }
+            });
+          } else {
+            this.postLoading = false;
+            this.$refs.postWrap.observer.disconnect();
+          }
+        })
+        .catch(err => {
+          this.observer.disconnect();
+          console.log(err);
+        });
+    },
     fetchPostData() {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           const postList = [];
           for (let i = 0; i < 5; i++) {
             postList.push({
-              coverImg:
+              posterUrl:
                 "https://sakura.2heng.xin/wp-content/uploads/2018/05/r63888719_by__LM7_-1024x534.jpg",
-              createAt: "2021-08-02",
+              createdAt: "2021-08-02",
               title: "WebP 全方位能力检测",
               pv: 100,
               likes: 15,
-              tag: "javascript",
-              intro: `一直以来，习惯在 flex 布局中使用 gap
+              tag: ["javascript"],
+              summary: `一直以来，习惯在 flex 布局中使用 gap
                       这个属性设置间距，一直以来也都是在最新的 Chrome
-                      上调试，所以从来没有想在 flex gap 在其他`,
+                      上调试，所以从来没有想在 flex gap 在其他`
             });
           }
           resolve(postList);
-        }, 3000);
+        }, 1500);
       });
-    },
-    async postHandle() {
-      const list = await this.fetchPostData();
-      this.postList = list;
-      setTimeout(() => {
-        this.postList.push({
-          coverImg:
-            "https://sakura.2heng.xin/wp-content/uploads/2018/05/r63888719_by__LM7_-1024x534.jpg",
-          createAt: "2023-01-02",
-          title: "javajavajava",
-          pv: 1310,
-          likes: 432,
-          tag: "java",
-          intro: `一直以来，习惯在 flex 布局中使用 gap
-                      这个属性设置间距，一直以来也都是在最新的 Chrome
-                      上调试，所以从来没有想在 flex gap 在其他`,
-        });
-      }, 2000);
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scope>
@@ -270,8 +289,15 @@ export default {
         }
       }
     }
-    // .latest-posts {
-    // }
+    .latest-posts {
+      .foot-loading {
+        width: 6.25rem;
+        height: 5rem;
+        text-align: center;
+        margin: -2rem auto;
+        @include font_color("notice-bg-color");
+      }
+    }
   }
 }
 </style>

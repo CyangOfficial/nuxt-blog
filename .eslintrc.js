@@ -18,11 +18,9 @@ module.exports = {
   plugins: ['vue'],
   // 自定义规则
   rules: {
-    semi: ['error', 'never'],
+    semi: [2, 'never'],
     'no-console': 'off',
     'vue/max-attributes-per-line': 'off',
-    'prettier/prettier': ['error', {
-      semi: false
-    }]
+    'prettier/prettier': ['error', { semi: false }]
   }
 }

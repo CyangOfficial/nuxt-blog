@@ -4,7 +4,7 @@ export default {
     host: 'localhost',
     port: '8080'
   },
-  // mode: 'spa',
+  ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'cyang-blog',
@@ -12,31 +12,36 @@ export default {
       lang: 'en'
     },
     meta: [{
-        charset: 'utf-8'
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content: ''
-      },
-      {
-        name: 'format-detection',
-        content: 'telephone=no'
-      }
+      charset: 'utf-8'
+    },
+    {
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1'
+    },
+    {
+      hid: 'description',
+      name: 'description',
+      content: ''
+    },
+    {
+      name: 'format-detection',
+      content: 'telephone=no'
+    }
     ],
     link: [{
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico'
-      },
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: '/favicon.ico'
+    },
       // { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' },
       // { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css' }
     ]
   },
+
+  // axios: {
+  //   baseURL: 'http://localhost:3000/api',
+  //   prefix: '/api'
+  // },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -50,14 +55,15 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // '@/plugins/antd-ui'
-    {
-      src: '@/plugins/svg',
-      ssr: false
-    },
-    {
-      src: '@/plugins/post-loader',
-      ssr: false
-    }
+    { src: '@/plugins/svg', mode: 'client' },
+    { src: '@/plugins/post-loader', mode: 'client' },
+    // { src: '@/plugins/progressive', mode: 'client' },
+    // { src: '@/plugins/lazyload', mode: 'client' },
+    // { src: '@/plugins/vconsole', mode: 'client' },
+    { src: '@/plugins/poly', mode: 'client' },
+    { src: '@/plugins/markdown', mode: 'client' },
+    { src: '@/plugins/aplayer', mode: 'client' },
+    // { src: '@/plugins/axios', mode: 'client' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -75,7 +81,9 @@ export default {
   },
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: [
+    // '@nuxtjs/axios'
+  ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
@@ -97,14 +105,14 @@ export default {
           }
         }]
       })
-      if (ctx.isDev && ctx.isClient) {
-        config.module.rules.push({
-          enforce: "pre",
-          test: /\.(js|vue)$/,
-          loader: "eslint-loader",
-          exclude: /(node_modules)/
-        })
-      }
+      // if (ctx.isDev && ctx.isClient) {
+      //   config.module.rules.push({
+      //     enforce: "pre",
+      //     test: /\.(js|vue)$/,
+      //     loader: "eslint-loader",
+      //     exclude: /(node_modules)/
+      //   })
+      // }
     }
   }
 }

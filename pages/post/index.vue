@@ -11,19 +11,28 @@
     </div>
     <div class="content d-flex jc-between">
       <div class="post-container">
-        <div class="skeleton-wrap" v-if="!postList.length">
+        <div class="skeleton-wrap" v-if="postSkeleton">
           <PostLoader v-for="item in 3" :key="item" />
         </div>
-        <div class="post-list" v-if="postList.length">
-          <PostItem v-if="postList.length" :postList="postList" />
+        <div class="post-list" v-else>
+          <PostItem :postList="postList" />
         </div>
+        <Pagination
+          :current-page="postParams.page"
+          :page-size="postParams.pageSize"
+          :total="postParams.total"
+          @current-change="changePage"
+        />
       </div>
       <div class="right-container m-hidden">
         <h3 class="r-head d-flex ai-center">
           <svg-icon name="ranking" />排行榜
         </h3>
-        <RankingLoader primaryColor="#" />
-        <div class="ranking-list">
+        <template v-if="!rankingList.length">
+          <RankingLoader v-for="item in 8" :key="item" primaryColor="#" />
+        </template>
+
+        <div class="ranking-list" v-else>
           <nuxt-link
             v-for="(item, index) in rankingList"
             :key="index"
@@ -65,89 +74,143 @@
 </template>
 
 <script>
-import RankingLoader from '@/components/RankingLoader'
+import RankingLoader from "@/components/RankingLoader";
+import Pagination from "@/components/Pagination";
+import { getPosts } from "@/api/post";
 export default {
   components: {
-    RankingLoader
+    RankingLoader,
+    Pagination
   },
-  data () {
+  data() {
     return {
       postList: [],
       rankingList: [],
-      tags: []
-    }
+      tags: [],
+      postParams: {
+        page: 1,
+        pageSize: 5,
+        total: 0
+      },
+      postSkeleton: true
+    };
   },
-  created () {
-    this.postHandle()
-    this.rankingHandle()
-    this.tagHandle()
+  created() {
+    // this.postHandle()
+    this.postHandle();
+    this.rankingHandle();
+    this.tagHandle();
   },
   methods: {
-    fetchPostData () {
-      return new Promise((resolve) => {
+    changePage(page) {
+      this.postParams.page = page;
+      window.scrollTo(0, 0);
+      this.postHandle();
+    },
+    postHandle() {
+      this.postList = [];
+      this.postSkeleton = true
+      const { page, pageSize } = this.postParams;
+      const params = { page, pageSize };
+      getPosts(params)
+        .then(res => {
+          this.postSkeleton = false
+          const { result } = res;
+          if (result.items.length > 0) {
+            this.postList = result.items;
+            this.postParams.total = result.total;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    fetchPostData() {
+      return new Promise(resolve => {
         setTimeout(() => {
-          const postList = []
+          const postList = [];
           for (let i = 0; i < 5; i++) {
             postList.push({
-              coverImg: require('@/assets/images/post-cover.jpg'),
-              createAt: '2021-08-02',
-              title: 'WebP 全方位能力检测',
+              coverImg: require("@/assets/images/post-cover.jpg"),
+              createAt: "2021-08-02",
+              title: "WebP 全方位能力检测",
               pv: 100,
               likes: 15,
-              tag: 'javascript',
+              tag: "javascript",
               intro: `一直以来，习惯在 flex 布局中使用 gap
                       这个属性设置间距，一直以来也都是在最新的 Chrome
                       上调试，所以从来没有想在 flex gap 在其他`
-            })
+            });
           }
-          resolve(postList)
-        }, 1500)
-      })
+          resolve(postList);
+        }, 1500);
+      });
     },
-    fetchRankingList () {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const data = new Array(7).fill({
-            title: '关于我',
-            link: 'https://www.cyang.com',
-            cover: require('@/assets/images/post-cover.jpg')
-          })
-          resolve(data)
-        }, 1000)
-      })
-    },
-    fetchTagList () {
+    fetchRankingList() {
       return new Promise(resolve => {
         setTimeout(() => {
-          const tags = ['CSS3', 'CSS', 'HTML5', 'GIT', 'javascript', 'Web Api', 'Poem', 'About Me', '正则表达式', '大事记', '汇率计算器', '面试', 'Music', 'Vue', 'ElementUi', 'VantUi', 'Nest.js', '微信小程序']
-          resolve(tags)
-        }, 1000)
-      })
+          const data = new Array(7).fill({
+            title: "关于我",
+            link: "https://www.cyang.com",
+            cover: require("@/assets/images/post-cover.jpg")
+          });
+          resolve(data);
+        }, 1000);
+      });
     },
-    async postHandle () {
-      const list = await this.fetchPostData()
-      this.postList = list
+    fetchTagList() {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const tags = [
+            "CSS3",
+            "CSS",
+            "HTML5",
+            "GIT",
+            "javascript",
+            "Web Api",
+            "Poem",
+            "About Me",
+            "正则表达式",
+            "大事记",
+            "汇率计算器",
+            "面试",
+            "Music",
+            "Vue",
+            "ElementUi",
+            "VantUi",
+            "Nest.js",
+            "微信小程序"
+          ];
+          resolve(tags);
+        }, 1000);
+      });
     },
-    async rankingHandle () {
-      const data = await this.fetchRankingList()
-      this.rankingList = data
+    // async postHandle() {
+    //   const list = await this.fetchPostData();
+    //   this.postList = list;
+    // },
+    async rankingHandle() {
+      const data = await this.fetchRankingList();
+      this.rankingList = data;
     },
-    async tagHandle () {
-      const data = await this.fetchTagList()
-      this.tags = data
+    async tagHandle() {
+      const data = await this.fetchTagList();
+      this.tags = data;
     }
-  },
-}
+  }
+};
 </script>
 <style lang="scss" scope>
 .post-container {
   width: 100%;
   .header-bg {
+    width: 100vw;
     height: 30rem;
     overflow: hidden;
     display: flex;
     align-items: center;
     position: relative;
+    overflow: hidden;
     @include mobile() {
       height: 17.5rem;
       align-items: flex-start;
@@ -159,7 +222,7 @@ export default {
       height: auto;
       margin-bottom: 3rem;
       @include mobile() {
-        width: auto;
+        width: 100%;
         height: 100%;
         margin: 0 auto;
       }
@@ -189,16 +252,16 @@ export default {
     }
   }
   .content {
-    width: 90rem;
+    width: 85rem;
     margin: 3rem auto 0;
     @include mobile() {
       max-width: 100vw;
       padding: 0 1rem;
     }
     .post-container {
-      width: 59rem;
+      width: 56rem;
       @include mobile() {
-        width: auto;
+        // width: auto;
       }
       .post-list {
         width: 100%;
@@ -224,7 +287,7 @@ export default {
   }
 }
 .right-container {
-  width: 27rem;
+  width: 25rem;
   // margin-left: 4rem;
   // flex-grow: 1;
   overflow: hidden;
@@ -248,7 +311,7 @@ export default {
   padding: 0.9rem;
   // background-color: rgba(245, 245, 245, 0.8);
   @include background_color("ranking-bg");
-  @include theme_transition(background);
+  @include theme_transition('background');
   position: relative;
   .post-intro {
     .title {
@@ -277,11 +340,12 @@ export default {
   }
 }
 .tag-list {
+  width: 100%;
   .item-tag {
     display: inline-block;
     margin-right: 0.6rem;
     margin-bottom: 0.6rem;
-    padding: 0px 0.375rem;
+    padding: 0 0.375rem;
     font-size: 0.875rem;
     line-height: 1.6;
     color: rgb(0, 150, 94);

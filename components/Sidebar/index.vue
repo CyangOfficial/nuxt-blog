@@ -1,5 +1,5 @@
 <template>
-  <aside id="sidebar" :class="{ open: sidebarOpened }" v-if="isMobile">
+  <aside id="sidebar" :class="{ open: sidebarOpened }">
     <div class="overview">
       <div class="auth-info d-flex jc-center ai-center">
         <div class="avatar">
@@ -59,28 +59,26 @@
 
 <script>
 export default {
-  data () {
-    return {
-    };
+  data() {
+    return {};
   },
   computed: {
-    isMobile () {
-      return this.$store.state.isMobile
+    isMobile() {
+      return this.$store.state.isMobile;
     },
-    sidebarOpened () {
-      return this.$store.state.sidebarOpened
+    sidebarOpened() {
+      return this.$store.state.sidebarOpened;
     }
   },
-  methods: {
-  },
-}
+  methods: {}
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 #sidebar {
   width: 60vw;
   height: 100vh;
   // background-color: #fff;
-  @include background_color('bg-color');
+  @include background_color("bg-color");
   position: fixed;
   top: 0;
   left: 0;
@@ -111,13 +109,13 @@ export default {
       .sub-name {
         font-size: 1rem;
         // color: #999;
-        @include font_color('sidebar-tit2');
+        @include font_color("sidebar-tit2");
         font-weight: normal;
         line-height: 2em;
       }
       .name {
         font-size: 0.9rem;
-        @include font_color('sidebar-tit1');
+        @include font_color("sidebar-tit1");
         line-height: 2em;
         font-weight: 400;
         margin-top: 1rem;
@@ -147,7 +145,7 @@ export default {
           }
           .meta-link {
             color: #666;
-            @include font_color('sidebar-tit3');
+            @include font_color("sidebar-tit3");
             text-align: center;
             span {
               display: block;
@@ -177,7 +175,7 @@ export default {
       margin-top: 2rem;
       .nav-item {
         // color: rgb(70, 70, 70);
-        @include font_color('sidebar-navs');
+        @include font_color("sidebar-navs");
         // margin-top: 2rem;
         line-height: 3em;
         .svg-icon {

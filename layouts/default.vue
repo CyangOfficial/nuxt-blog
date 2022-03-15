@@ -5,7 +5,7 @@
     <Sidebar />
     <div
       v-if="!isMobile"
-      @click="goTop"
+      @click="scrollTop"
       class="cat-top m-hidden"
       :class="{ down: catDown }"
     ></div>
@@ -16,68 +16,93 @@
       :class="{ show: sidebarOpened }"
     ></div>
     <nuxt />
+    <MPlayer :list="musicLists" />
     <Footer />
   </main>
 </template>
 
 <script>
-import { throttle } from '@/utils'
-import Sidebar from '@/components/Sidebar'
-import { lock, unlock } from 'tua-body-scroll-lock'
+import { throttle } from  "@/utils";
+import Sidebar from "@/components/Sidebar";
+import { lock, unlock } from "tua-body-scroll-lock";
+import MPlayer from '@/components/Player'
 export default {
-  data () {
+  data() {
     return {
-      catDown: false
+      catDown: false,
+      musicLists: [
+        {
+          title: 'Warmest Regards',
+          artist: 'Half Moon Run',
+          lrc: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/Half%20Moon%20Run%20-%20Warmest%20Regards%20(Extended%20Version).lrc',
+          src: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/Half%20Moon%20Run%20-%20Warmest%20Regards%20(Extended%20Version).mp3',
+          pic: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/WarmestRegards.jpg'
+        },
+        {
+          title: 'Warmest Regards',
+          artist: 'Half Moon Run',
+          lrc: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/Half%20Moon%20Run%20-%20Warmest%20Regards%20(Extended%20Version).lrc',
+          src: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/Half%20Moon%20Run%20-%20Warmest%20Regards%20(Extended%20Version).mp3',
+          pic: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/WarmestRegards.jpg'
+        },
+        {
+          title: 'Warmest Regards',
+          artist: 'Half Moon Run',
+          lrc: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/Half%20Moon%20Run%20-%20Warmest%20Regards%20(Extended%20Version).lrc',
+          src: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/Half%20Moon%20Run%20-%20Warmest%20Regards%20(Extended%20Version).mp3',
+          pic: 'https://cyy-blog-1258211293.cos.ap-beijing.myqcloud.com/player/WarmestRegards.jpg'
+        }
+      ]
     };
   },
   components: {
-    Sidebar
+    Sidebar,
+    MPlayer
   },
   computed: {
-    isMobile () {
-      return this.$store.state.isMobile
+    isMobile() {
+      return this.$store.state.isMobile;
     },
-    sidebarOpened () {
-      return this.$store.state.sidebarOpened
+    sidebarOpened() {
+      return this.$store.state.sidebarOpened;
     }
   },
   watch: {
-    '$store.state.sidebarOpened' (n, o) {
+    "$store.state.sidebarOpened"(n, o) {
       if (n) {
-        const layer = this.$refs['layer']
+        const layer = this.$refs["layer"];
         // const sidebar = document.querySelector('#sidebar')
-        lock(layer)
+        // 解决移动端穿透问题
+        lock(layer);
       } else {
-        unlock()
+        unlock();
       }
     },
-    $route (n, o) {
+    $route(n, o) {
       if (this.$store.state.isMobile) {
-        this.$store.commit('toggleSidebar', false)
+        this.$store.commit("toggleSidebar", false);
       }
-      // console.log(n, o)
     }
   },
-  mounted () {
-    document.documentElement.setAttribute('data-theme', 'default-theme')
-    !this.isMobile && window.addEventListener('scroll', this.scrollHandle)
+  mounted() {
+    window.addEventListener("scroll", this.scrollHandle);
   },
   methods: {
-    scrollHandle: throttle(function () {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-      this.catDown = scrollTop > 400
+    scrollHandle: throttle(function() {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      this.catDown = scrollTop > 400;
     }, 300),
-    goTop () {
+    scrollTop() {
       window.scrollTo({
         top: 0,
         behavior: "smooth"
       });
     },
-    clickMask () {
-      this.$store.commit('toggleSidebar')
+    clickMask() {
+      this.$store.commit("toggleSidebar");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scope>
@@ -85,6 +110,7 @@ export default {
   overflow-x: hidden;
   @include background_color("bg-color");
   @include theme_transition(background);
+
   .cat-top {
     width: 4.67rem;
     height: 0;
@@ -99,10 +125,12 @@ export default {
     transition: height 0.5s ease;
     animation: float 2s linear infinite;
     cursor: pointer;
+
     &.down {
       height: 70vh;
     }
   }
+
   .mask-layer {
     width: 100vw;
     height: 100vh;
@@ -112,11 +140,23 @@ export default {
     left: 0;
     top: 0;
     display: none;
+
     @include mobile() {
       &.show {
         display: block;
       }
     }
+  }
+  .player-wrap {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    z-index: 99;
+    overflow: visible;
+    max-width: 400px;
+    box-shadow: none;
   }
 }
 </style>

@@ -5,29 +5,39 @@
       v-for="(item, index) in postList"
       :key="index"
     >
-      <nuxt-link to="/post/123" class="post-cover">
-        <img :src="item.coverImg" :alt="item.title" />
+      <nuxt-link :to="'/post/' + item._id" class="post-cover">
+        <img
+          class="poster-img"
+          :data-src="item.posterUrl"
+          style="height: 100%"
+          :src="item.posterUrl + '?imageView2/3/w/50|imageMogr2/blur/40x5'"
+          :alt="item.title"
+        />
+        <!-- <progressive-img
+          :src="item.posterUrl"
+          :placeholder="item.posterUrl + '?imageView2/3/w/50'"
+        /> -->
       </nuxt-link>
       <div class="post-wrap">
         <p class="create-time">
-          <svg-icon name="time" />发布于：{{ item.createAt }}
+          <svg-icon name="time" />发布于：{{ item.createdAt }}
         </p>
-        <nuxt-link to="/post/123" class="post-links post-title">
+        <nuxt-link :to="'/post/' + item._id" class="post-links post-title">
           <h2>{{ item.title }}</h2>
         </nuxt-link>
         <div class="post-meta">
-          <span class="item-meta"><svg-icon name="eye" />{{ item.pv }}</span>
+          <span class="item-meta"><svg-icon name="eye" />{{ item.pv }} 热度</span>
           <span class="item-meta"
-            ><svg-icon name="heart_hollow" />{{ item.likes }}</span
+            ><svg-icon name="heart_hollow" />{{ item.like }} 喜欢</span
           >
           <span class="item-meta">
-            <nuxt-link to="/post/123"
-              ><svg-icon name="folder" />{{ item.tag }}</nuxt-link
+            <nuxt-link :to="'/post/' + item._id"
+              ><svg-icon name="folder" />{{ item.tags && item.tags[0] }}</nuxt-link
             >
           </span>
         </div>
-        <p class="post-intro">{{ item.intro }}</p>
-        <nuxt-link to="/post/123" class="post-menu m-hidden">
+        <p class="post-intro">{{ item.summary }}</p>
+        <nuxt-link :to="'/post/' + item._id" class="post-menu m-hidden">
           <svg-icon name="ellipsis"></svg-icon>
         </nuxt-link>
       </div>
@@ -36,24 +46,57 @@
 </template>
 
 <script>
-
 export default {
   props: {
     postList: {
       type: Array,
       required: true,
-      default: []
+      default: () => []
+    },
+    pageSize: {
+      type: Number,
+      default: 5
     }
   },
-  data () {
+  data() {
     return {
+      observer: null
     };
   },
-  methods: {
+  mounted() {
+    this.handleLzay();
   },
-}
+  watch: {
+    postList() {
+      this.$nextTick(() => {
+        const posterImg = Array.from(document.querySelectorAll(".poster-img")).slice(this.pageSize * -1)
+        posterImg.forEach(item => {
+          this.observer.observe(item);
+        });
+      });
+    }
+  },
+  methods: {
+    handleLzay() {
+      const posterImg = document.querySelectorAll(".poster-img");
+      this.observer = new IntersectionObserver(entries => {
+        entries.forEach(item => {
+          if (item.isIntersecting) {
+            item.target.src = item.target.dataset.src;
+            item.target.removeAttribute("data-src");
+            this.observer.unobserve(item.target);
+          }
+        });
+      });
+
+      posterImg.forEach(item => {
+        this.observer.observe(item);
+      });
+    }
+  }
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .post-entry {
   .item-post {
     width: 100%;
@@ -82,15 +125,23 @@ export default {
 .post-cover {
   width: 33rem;
   overflow: hidden;
-  &:hover {
-    img {
-      transform: scale(1.05);
+  /deep/ .progressive-image {
+    min-height: 100%;
+    .progressive-image-main {
+      height: 100%;
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
+
   img {
     width: 100%;
-    min-height: 100%;
+    // min-height: 100%;
     transition: all 0.5s ease;
+    &:hover {
+      transform: scale(1.05);
+    }
   }
   @include mobile() {
     width: 100%;

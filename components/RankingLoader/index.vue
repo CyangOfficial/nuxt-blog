@@ -1,38 +1,40 @@
 <template>
   <div class="ranking-loader-wrap">
     <client-only>
-      <ContentLoader
-        :width="500"
-        :height="96"
-        :primaryColor="primaryColor"
-        :secondaryColor="secondaryColor"
-      >
-        <rect x="0" y="0" rx="6" ry="6" width="500" height="96" />
-        <rect x="30" y="30" rx="0" ry="0" width="75" height="21" />
-        <!-- <rect x="750" y="28" rx="3" ry="3" width="160" height="18" /> -->
+      <ContentLoader :width="500" :height="96" :primaryColor="primaryColor" :secondaryColor="secondaryColor">
+        <rect x="15" y="25" rx="3" ry="3" width="100" height="15" />
+        <rect x="15" y="60" rx="3" ry="3" width="200" height="15" />
+        <rect x="410" y="16" rx="6" ry="6" width="70" height="70" />
       </ContentLoader>
     </client-only>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {};
-  },
-  computed: {
-    isMobile () {
-      return this.$store.state.isMobile
+  export default {
+    data() {
+      return {}
     },
-    primaryColor () {
-      return this.$store.state.blogTheme === 'default-theme' ? '#f3f3f3' : '#2A2C2D'
+    computed: {
+      isMobile() {
+        return this.$store.state.isMobile
+      },
+      primaryColor() {
+        return this.$store.state.blogTheme === "default-theme" ? "#EDEDED" : "#2A2C2D"
+      },
+      secondaryColor() {
+        return this.$store.state.blogTheme === "default-theme" ? "#E7E7E7" : "#3e4041"
+      },
     },
-    secondaryColor () {
-      return this.$store.state.blogTheme === 'default-theme' ? '#ecebeb' : '#3e4041'
-    }
-  },
-  methods: {},
-};
+    methods: {},
+  }
+
 </script>
 <style lang='scss' scoped>
+  .ranking-loader-wrap {
+    box-shadow: rgba(150, 150, 150, 0.5) 0px 1px 20px -8px;
+    margin-bottom: 3rem;
+    background-color: #F4F4F4;
+  }
+
 </style>

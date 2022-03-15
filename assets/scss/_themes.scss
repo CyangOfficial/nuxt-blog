@@ -1,7 +1,10 @@
 $white: rgb(245, 246, 247);
-$gray1: #CBC8C0;
-$gray2: #969696;
+$gray1: #EFEFEF;
+$gray2: #CBC8C0;
+$gray3: #969696;
 $gray6: #666;
+
+$dark1: #2c3e50;
 
 $white1: #f5f6f7;
 
@@ -28,7 +31,14 @@ $default-theme : (
   sidebar-navs: #464646,
   post-r-text1: $gray6,
   ranking-bg: rgba(245, 245, 245, 0.8),
-  ranking-link: $gray2
+  ranking-link: $gray3,
+  pagination-bg: $gray1,
+  pagination-color: #0f0f0f,
+  pagination-active-bg: rgba(60, 211, 142, 1),
+  pagination-active-color: #fff,
+  post-level-title: $dark1,
+  single-code: rgba(27, 31, 35, 0.05),
+  md-level-border: #eaecef
 );
 $dark-theme: (
   bg-color: #181a1b,
@@ -40,7 +50,7 @@ $dark-theme: (
   section-title: $white,
   post-title: $white,
   post-meta: #cbc8c0,
-  post-create-time: $gray1,
+  post-create-time: $gray2,
   post-content: $white,
   post-bg: #1d1f27,
   post-hover: #a84141,
@@ -54,7 +64,14 @@ $dark-theme: (
   sidebar-navs: #eaeaea,
   post-r-text1: $white1,
   ranking-bg: rgba(27, 29, 30, 0.8),
-  ranking-link: $gray1
+  ranking-link: $gray2,
+  pagination-bg: #2F313A,
+  pagination-color: #fff,
+  pagination-active-bg: rgba(60, 211, 142, 0.5),
+  pagination-active-color: #fff,
+  post-level-title: $white1,
+  single-code: $dark1,
+  md-level-border: rgb(230, 230, 230)
 );
 
 $themes: (
