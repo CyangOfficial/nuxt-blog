@@ -35,14 +35,15 @@
       </div>
       <div class="latest-posts" v-else>
         <PostItem
-          ref="postWrap"
+          ref="postItem"
           :postList="postList"
           :pageSize="postParams.pageSize"
+          :listNum="listNum"
         />
-        <div v-if="postLoading" class="foot-loading">
-          <SvgIcon name="ellipsis-loading" />
+        <div v-if="!isLastPage" class="foot-loading">
+          <SvgIcon name="loading" />
         </div>
-        <!-- <p v-if="postLoading" class="foot-loading">加载中...</p> -->
+        <p v-if="isLastPage" class="foot-text">到底啦~</p>
       </div>
     </section>
   </section>
@@ -93,57 +94,69 @@ export default {
         page: 1,
         pageSize: 5
       },
+      listNum: 5,
+      isLastPage: false,
       postLoading: true,
       loadMoreObserver: null,
       lazyObserver: null
     };
   },
   mounted() {
-    this.postHandle();
+    console.log('mounted')
+    this.fetchPostData();
   },
   methods: {
-    // 观察底部foot-loading是否进入可视区
+    // 观察底部loading是否进入可视区
     observeLoadText() {
       const footEl = document.querySelector(".foot-loading");
       this.loadMoreObserver = new IntersectionObserver(entries => {
         if (entries[0].isIntersecting) {
           this.postParams.page += 1;
-          this.postHandle();
+          this.fetchPostData();
           this.loadMoreObserver.unobserve(entries[0].target);
         }
       });
-      this.loadMoreObserver.observe(footEl);
+      footEl && this.loadMoreObserver.observe(footEl);
     },
-    async postHandle() {
+    fetchPostData() {
+      console.log('fetchHandle')
       getPosts(this.postParams)
         .then(res => {
           const { result } = res;
           if (result.items.length > 0) {
-            this.postList = [...this.postList, ...result.items];
+            this.postList.push(...result.items);
+            this.listNum = result.items.length;
+            this.isLastPage = (result.page * result.pageSize) > result.total
+            if (this.isLastPage) {
+              this.loadMoreObserver.disconnect();
+            }
             this.$nextTick(() => {
               this.observeLoadText();
-              // 从第2页开始懒加载
+              // 从第2页开始加载
               if (this.postParams.page > 1) {
                 const childItems = Array.from(
-                  this.$refs.postWrap.$el.childNodes
-                ).slice(this.postParams.pageSize * -1);
+                  this.$refs.postItem.$el.childNodes
+                ).slice(this.listNum * -1);
                 childItems.forEach(item => {
                   const imgItem = item.querySelector(".poster-img");
-                  this.$refs.postWrap.observer.observe(imgItem);
+                  this.$refs.postItem.observer.observe(imgItem);
                 });
               }
             });
           } else {
+            this.isLastPage = true
+            this.listNum = 0;
             this.postLoading = false;
-            this.$refs.postWrap.observer.disconnect();
+            this.$refs.postItem.observer.disconnect();
           }
         })
         .catch(err => {
+          this.listNum = 0;
           this.observer.disconnect();
           console.log(err);
         });
     },
-    fetchPostData() {
+    fetchMockData() {
       return new Promise(resolve => {
         setTimeout(() => {
           const postList = [];
@@ -291,11 +304,17 @@ export default {
     }
     .latest-posts {
       .foot-loading {
-        width: 6.25rem;
-        height: 5rem;
         text-align: center;
-        margin: -2rem auto;
+        margin: 0 auto;
         @include font_color("notice-bg-color");
+        .svg-icon {
+          width: 3rem;
+          height: 3rem;
+        }
+      }
+      .foot-text {
+        text-align: center;
+        @include font_color("post-title");
       }
     }
   }

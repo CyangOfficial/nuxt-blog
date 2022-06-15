@@ -3,18 +3,8 @@
   <main id="main-container">
     <Header />
     <Sidebar />
-    <div
-      v-if="!isMobile"
-      @click="scrollTop"
-      class="cat-top m-hidden"
-      :class="{ down: catDown }"
-    ></div>
-    <div
-      @click="clickMask"
-      ref="layer"
-      class="mask-layer"
-      :class="{ show: sidebarOpened }"
-    ></div>
+    <div v-if="!isMobile" @click="scrollTop" class="cat-top m-hidden" :class="{ down: catDown }"></div>
+    <div @click="clickMask" ref="layer" class="mask-layer" :class="{ show: sidebarOpened }"></div>
     <nuxt />
     <MPlayer :list="musicLists" />
     <Footer />
@@ -22,7 +12,7 @@
 </template>
 
 <script>
-import { throttle } from  "@/utils";
+import { throttle } from "@/utils";
 import Sidebar from "@/components/Sidebar";
 import { lock, unlock } from "tua-body-scroll-lock";
 import MPlayer from '@/components/Player'
@@ -88,7 +78,7 @@ export default {
     window.addEventListener("scroll", this.scrollHandle);
   },
   methods: {
-    scrollHandle: throttle(function() {
+    scrollHandle: throttle(function () {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       this.catDown = scrollTop > 400;
     }, 300),
@@ -120,8 +110,7 @@ export default {
     z-index: 4;
     background: url("~/assets/images/scroll.png") no-repeat center bottom;
     background-size: cover;
-    cursor: url("https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/cursor/ayuda.cur"),
-      auto;
+    cursor: url("https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/cursor/ayuda.cur"), auto;
     transition: height 0.5s ease;
     animation: float 2s linear infinite;
     cursor: pointer;
@@ -147,6 +136,7 @@ export default {
       }
     }
   }
+
   .player-wrap {
     position: fixed;
     bottom: 0;

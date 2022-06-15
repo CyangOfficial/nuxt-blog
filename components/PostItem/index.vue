@@ -56,6 +56,10 @@ export default {
     pageSize: {
       type: Number,
       default: 5
+    },
+    listNum: {
+      type: Number,
+      default: 5
     }
   },
   data() {
@@ -69,7 +73,8 @@ export default {
   watch: {
     postList() {
       this.$nextTick(() => {
-        const posterImg = Array.from(document.querySelectorAll(".poster-img")).slice(this.pageSize * -1)
+        const posterImg = Array.from(document.querySelectorAll(".poster-img")).slice(this.listNum * -1)
+        console.log(posterImg)
         posterImg.forEach(item => {
           this.observer.observe(item);
         });
@@ -88,7 +93,6 @@ export default {
           }
         });
       });
-
       posterImg.forEach(item => {
         this.observer.observe(item);
       });
@@ -125,6 +129,7 @@ export default {
 .post-cover {
   width: 33rem;
   overflow: hidden;
+  @include theme_transition(background);
   /deep/ .progressive-image {
     min-height: 100%;
     .progressive-image-main {

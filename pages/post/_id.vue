@@ -39,115 +39,6 @@
               class="vue-md-ediotr"
               :text="markdownContent"
             />
-            <!-- <h1 class="ql-align-center">
-              <span
-                class="ql-font-serif"
-                style="
-                  color: rgb(255, 255, 255);
-                  background-color: rgb(240, 102, 102);
-                "
-              >
-              </span>
-            </h1>
-            <h1 class="ql-align-center">
-              <span
-                class="ql-font-serif"
-                style="
-                  color: rgb(255, 255, 255);
-                  background-color: rgb(240, 102, 102);
-                "
-                >I am snow example!
-              </span>
-            </h1>
-            <p><br /></p>
-            <p>
-              <span class="ql-font-serif"
-                >W Can a man still be brave if he's afraid? That is the only
-                time a man can be brave.
-              </span>
-            </p>
-            <p><br /></p>
-            <p>
-              <strong class="ql-size-large ql-font-serif"
-                >Courage and folly is </strong
-              ><strong
-                class="ql-size-large ql-font-serif"
-                style="color: rgb(230, 0, 0)"
-                >always</strong
-              ><strong class="ql-size-large ql-font-serif">
-                just a fine line.</strong
-              >
-            </p>
-            <p><br /></p>
-            <p>
-              <u class="ql-font-serif"
-                >There is only one God, and his name is Death. And there is only
-                one thing we say to Death: "Not today."</u
-              >
-            </p>
-            <p><br /></p>
-            <p><em class="ql-font-serif">Fear cuts deeper than swords.</em></p>
-            <p><br /></p>
-            <p><br /></p>
-            <pre
-              class="ql-syntax"
-              spellcheck="false"
-            ><span class="hljs-keyword">const</span> a = <span class="hljs-number">10</span>; <span class="hljs-keyword">const</span> editorOption = { <span class="hljs-attr">highlight</span>: <span class="hljs-function"><span class="hljs-params">text</span> =&gt;</span> hljs.highlightAuto(text).value }; </pre>
-            <p><br /></p>
-            <p>
-              <span class="ql-font-serif"
-                >Every flight begins with a fall.</span
-              >
-            </p>
-            <p><br /></p>
-            <p>
-              <a
-                href="https://surmon.me/"
-                rel="noopener noreferrer"
-                target="_blank"
-                class="ql-size-small ql-font-serif"
-                style="color: rgb(230, 0, 0)"
-                ><u
-                  >A ruler who hides behind paid executioners soon forgets what
-                  death is.
-                </u></a
-              >
-            </p>
-            <p><br /></p>
-            <iframe
-              class="ql-video ql-align-center"
-              frameborder="0"
-              allowfullscreen="true"
-              src="https://www.youtube.com/embed/QHH3iSeDBLo?showinfo=0"
-              height="238"
-              width="560"
-            ></iframe>
-            <p><br /></p>
-            <p>
-              <span class="ql-font-serif"
-                >Hear my words, and bear witness to my vow. Night gathers, and
-                now my watch begins. It shall not end until my death. I shall
-                take no wife, hold no lands, father no children. I shall wear no
-                crowns and win no glory. I shall live and die at my post. I am
-                the sword in the darkness. I am the watcher on the walls. I am
-                the fire that burns against the cold, the light that brings the
-                dawn, the horn that wakes the sleepers, the shield that guards
-                the realms of men. I pledge my life and honor to the Night’s
-                Watch, for this night and all the nights to come.</span
-              >
-            </p>
-            <p><br /></p>
-            <p>
-              <span class="ql-font-serif"
-                >We are born to suffer, to suffer can make us strong.</span
-              >
-            </p>
-            <p><br /></p>
-            <p>
-              <span class="ql-font-serif"
-                >The things we love destroy us every time.</span
-              >
-            </p> -->
           </div>
           <section class="post-context d-flex">
             <nuxt-link to="/post/123" class="nuxt-link prev">
@@ -201,7 +92,6 @@ export default {
       });
   },
   head() {
-    console.log(this.postTitle);
     return {
       title: this.postTitle
     };
@@ -225,7 +115,6 @@ export default {
     this.listenTopbg();
     // this.listenDoc()
     const anchors = this.$refs.preview.$el.querySelectorAll("h1,h2,h3,h4,h5,h6");
-    console.log(anchors)
     const titles = Array.from(anchors).filter(item => !!item.innerText.trim());
     const hTags = Array.from(new Set(titles.map(item => item.tagName))).sort();
     this.anchors = titles.map(el => ({
@@ -238,9 +127,7 @@ export default {
     handleAnchorClick(anchor) {
       const { preview } = this.$refs;
       const { lineIndex } = anchor;
-
       const heading = document.querySelector(`[data-v-md-line="${lineIndex}"]`);
-      console.log(heading)
       if (heading) {
         preview.scrollToTarget({
           target: heading,

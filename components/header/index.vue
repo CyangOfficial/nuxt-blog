@@ -15,8 +15,8 @@
           <nuxt-link class="nav_link" to="/post"
             ><svg-icon name="post" />文章</nuxt-link
           >
-          <nuxt-link class="nav_link" to="/categories"
-            ><svg-icon name="bookmarks" />分类</nuxt-link
+          <nuxt-link class="nav_link" to="/archive"
+            ><svg-icon name="archive" />归档</nuxt-link
           >
           <nuxt-link class="nav_link" to="/about"
             ><svg-icon name="person" />关于</nuxt-link

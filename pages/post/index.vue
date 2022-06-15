@@ -1,28 +1,25 @@
 <!--  -->
 <template>
   <div class="post-container">
-    <div class="header-bg">
-      <picture>
-        <!-- <source type="image/webp" srcset="@/assets/images/wallhaven.webp" /> -->
-        <img src="@/assets/images/Attack-on-Titan.jpg" alt="啦啦" />
-      </picture>
-      <!-- <h2 class="head-tit">什么都无法舍弃的人，什么都改变不了！</h2> -->
-      <h2 class="head-tit">文 章</h2>
-    </div>
+    <Banner title="文章" imgName="Attack-on-Titan.jpg" />
     <div class="content d-flex jc-between">
       <div class="post-container">
         <div class="skeleton-wrap" v-if="postSkeleton">
           <PostLoader v-for="item in 3" :key="item" />
         </div>
         <div class="post-list" v-else>
-          <PostItem :postList="postList" />
+          <PostItem :postList="postList" :listNum="listNum" />
         </div>
-        <Pagination
+        <div class="pagination d-flex jc-center" v-show="!isLastPage">
+          <a v-show="!loading" href="javascript:;" class="loading" @click="showMorePost">加载更多</a>
+          <SvgIcon v-show="loading" name="loading" />
+        </div>
+        <!-- <Pagination
           :current-page="postParams.page"
           :page-size="postParams.pageSize"
           :total="postParams.total"
           @current-change="changePage"
-        />
+        /> -->
       </div>
       <div class="right-container m-hidden">
         <h3 class="r-head d-flex ai-center">
@@ -33,17 +30,9 @@
         </template>
 
         <div class="ranking-list" v-else>
-          <nuxt-link
-            v-for="(item, index) in rankingList"
-            :key="index"
-            class="item-rank"
-            to="post"
-          >
+          <nuxt-link v-for="(item, index) in rankingList" :key="index" class="item-rank" to="post">
             <div class="rank-wrap">
-              <div
-                class="blur"
-                :style="{ backgroundImage: `url(${item.cover})` }"
-              ></div>
+              <div class="blur" :style="{ backgroundImage: `url(${item.cover})` }"></div>
               <div class="ranking-content d-flex ai-center jc-between">
                 <div class="post-intro">
                   <p class="title">{{ item.title }}</p>
@@ -75,12 +64,14 @@
 
 <script>
 import RankingLoader from "@/components/RankingLoader";
-import Pagination from "@/components/Pagination";
 import { getPosts } from "@/api/post";
+import SvgIcon from "../../components/SvgIcon/index.vue";
+import Banner from '@/components/banner'
 export default {
   components: {
     RankingLoader,
-    Pagination
+    SvgIcon,
+    Banner
   },
   data() {
     return {
@@ -92,6 +83,9 @@ export default {
         pageSize: 5,
         total: 0
       },
+      listNum: 5,
+      loading: false,
+      isLastPage: false,
       postSkeleton: true
     };
   },
@@ -107,44 +101,35 @@ export default {
       window.scrollTo(0, 0);
       this.postHandle();
     },
+    showMorePost() {
+      this.postParams.page += 1
+      this.postHandle()
+    },
     postHandle() {
-      this.postList = [];
-      this.postSkeleton = true
+      // this.postList = [];
+      // this.postSkeleton = true;
+      this.loading = true
       const { page, pageSize } = this.postParams;
       const params = { page, pageSize };
       getPosts(params)
         .then(res => {
-          this.postSkeleton = false
+          this.loading = false
+          this.postSkeleton = false;
           const { result } = res;
           if (result.items.length > 0) {
-            this.postList = result.items;
+            const lastPage = (result.page * result.pageSize) > result.total
+            this.listNum = result.items.length
+            this.isLastPage = lastPage
+            this.postList.push(...result.items);
             this.postParams.total = result.total;
+          } else {
+            this.listNum = 0
+            this.isLastPage = true
           }
         })
         .catch(err => {
           console.log(err);
         });
-    },
-    fetchPostData() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          const postList = [];
-          for (let i = 0; i < 5; i++) {
-            postList.push({
-              coverImg: require("@/assets/images/post-cover.jpg"),
-              createAt: "2021-08-02",
-              title: "WebP 全方位能力检测",
-              pv: 100,
-              likes: 15,
-              tag: "javascript",
-              intro: `一直以来，习惯在 flex 布局中使用 gap
-                      这个属性设置间距，一直以来也都是在最新的 Chrome
-                      上调试，所以从来没有想在 flex gap 在其他`
-            });
-          }
-          resolve(postList);
-        }, 1500);
-      });
     },
     fetchRankingList() {
       return new Promise(resolve => {
@@ -203,72 +188,115 @@ export default {
 <style lang="scss" scope>
 .post-container {
   width: 100%;
-  .header-bg {
-    width: 100vw;
-    height: 30rem;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    @include mobile() {
-      height: 17.5rem;
-      align-items: flex-start;
-      margin: 0;
-    }
-    picture,
-    img {
-      width: 100%;
-      height: auto;
-      margin-bottom: 3rem;
-      @include mobile() {
-        width: 100%;
-        height: 100%;
-        margin: 0 auto;
-      }
-    }
-    .head-tit {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%);
-      text-align: center;
-      font-size: 2.4rem;
-      color: #eaeaea;
-      text-align: right;
-      // color: transparent;
-      // -webkit-text-fill-color: transparent;
-      -webkit-font-smoothing: antialiased;
-      // background: linear-gradient(
-      //   to left,
-      //   rgb(241, 241, 240) 33%,
-      //   rgb(252, 239, 232) 73%
-      // );
-      // background-clip: text;
-      @include mobile() {
-        font-size: 2rem;
-        font-weight: 700;
-      }
-    }
-  }
+
+  // .header-bg {
+  //   width: 100vw;
+  //   height: 30rem;
+  //   overflow: hidden;
+  //   display: flex;
+  //   align-items: center;
+  //   position: relative;
+  //   overflow: hidden;
+
+  //   @include mobile() {
+  //     height: 17.5rem;
+  //     align-items: flex-start;
+  //     margin: 0;
+  //   }
+
+  //   picture,
+  //   img {
+  //     width: 100%;
+  //     height: auto;
+  //     margin-bottom: 3rem;
+
+  //     @include mobile() {
+  //       width: 100%;
+  //       height: 100%;
+  //       margin: 0 auto;
+  //     }
+  //   }
+
+  //   .head-tit {
+  //     position: absolute;
+  //     left: 50%;
+  //     top: 50%;
+  //     transform: translate(-50%);
+  //     text-align: center;
+  //     font-size: 2.4rem;
+  //     color: #eaeaea;
+  //     text-align: right;
+  //     // color: transparent;
+  //     // -webkit-text-fill-color: transparent;
+  //     -webkit-font-smoothing: antialiased;
+
+  //     // background: linear-gradient(
+  //     //   to left,
+  //     //   rgb(241, 241, 240) 33%,
+  //     //   rgb(252, 239, 232) 73%
+  //     // );
+  //     // background-clip: text;
+  //     @include mobile() {
+  //       font-size: 2rem;
+  //       font-weight: 700;
+  //     }
+  //   }
+  // }
+
   .content {
     width: 85rem;
     margin: 3rem auto 0;
+
     @include mobile() {
       max-width: 100vw;
       padding: 0 1rem;
     }
+
     .post-container {
       width: 56rem;
+
       @include mobile() {
         // width: auto;
       }
+
       .post-list {
         width: 100%;
+      }
+
+      .pagination {
+        a {
+          padding: 0.8rem 2.1rem;
+          border: 1px solid #d6d6d6;
+          border-radius: 3.125rem;
+          color: #adadad;
+          transition: color .2s ease-out, border .2s ease-out, opacity .2s ease-out;
+
+          &:hover {
+            box-shadow: 0 0 4px rgba(255, 165, 0, 0.85);
+            border-color: #fe9600;
+            color: #fe9600;
+          }
+
+          &.loading {
+            // background: url('https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/images/wordpress-rotating-ball-o.svg');
+            // background: url('~/assets/svg/wordpress-rotating-ball-o.svg');
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #555;
+            // border: none;
+            background-size: auto 100%;
+          }
+        }
+
+        .svg-icon {
+          width: 3rem;
+          height: 3rem;
+        }
       }
     }
   }
 }
+
 .r-head {
   width: 20rem;
   padding-bottom: 0.5rem;
@@ -276,28 +304,33 @@ export default {
   @include font_color("post-r-text1");
   @include theme_transition(color);
   margin-bottom: 2rem;
+
   &.tag {
     margin-top: 4rem;
     margin-bottom: 1rem;
   }
+
   .svg-icon {
     width: 2rem;
     height: 2rem;
     margin-right: 0.8rem;
   }
 }
+
 .right-container {
   width: 25rem;
   // margin-left: 4rem;
   // flex-grow: 1;
   overflow: hidden;
 }
+
 .ranking-list {
   .rank-wrap {
     position: relative;
     overflow: hidden;
     border-radius: 0.6rem;
     margin-bottom: 1rem;
+
     .blur {
       filter: blur(5px);
       background-size: cover;
@@ -307,18 +340,21 @@ export default {
     }
   }
 }
+
 .ranking-content {
   padding: 0.9rem;
   // background-color: rgba(245, 245, 245, 0.8);
   @include background_color("ranking-bg");
-  @include theme_transition('background');
+  @include theme_transition("background");
   position: relative;
+
   .post-intro {
     .title {
       font-size: 1.2rem;
       @include font_color("post-r-text1");
       @include theme_transition(color);
     }
+
     .link {
       display: block;
       margin-top: 0.8rem;
@@ -332,6 +368,7 @@ export default {
       white-space: nowrap;
     }
   }
+
   .cover {
     width: 4rem;
     height: 4rem;
@@ -339,8 +376,10 @@ export default {
     object-fit: cover;
   }
 }
+
 .tag-list {
   width: 100%;
+
   .item-tag {
     display: inline-block;
     margin-right: 0.6rem;
@@ -351,6 +390,7 @@ export default {
     color: rgb(0, 150, 94);
     background-color: rgba(0, 150, 94, 0.1);
     border-radius: 0.1875rem;
+
     &:hover {
       background-color: rgba(0, 150, 94, 0.2);
     }

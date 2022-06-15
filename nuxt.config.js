@@ -43,6 +43,10 @@ export default {
   //   prefix: '/api'
   // },
 
+  env: {
+    VUE_APP_API_URL: 'http://localhost:3000/api',
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     // 'ant-design-vue/dist/antd.css'

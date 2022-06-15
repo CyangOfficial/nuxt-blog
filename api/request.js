@@ -6,7 +6,8 @@ import axios from 'axios' //引用axios
 
 // create an axios instance
 const service = axios.create({
-  baseURL: 'http://localhost:3000/api', // 所有异步请求都加上/api,nginx转发到后端Springboot
+  baseURL: process.env.VUE_APP_API_URL || '/api',
+  // baseURL: 'http://localhost:3000/api', // 所有异步请求都加上/api,nginx转发到后端Springboot
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 10000 // request timeout
 })
